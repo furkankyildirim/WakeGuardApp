@@ -16,7 +16,6 @@ const productIDs = ['com.wake.guard.weekly', 'com.wake.guard.monthly', 'com.wake
 
 const Purchase = observer(() => {
   const [products, setProducts] = useState([]);
-  //const [purchaseUpdateSubscription,setPurchaseUpdateSubscription] = useState(()=>{})
   const [purchaseErrorSubscription, setPurchaseErrorSubscription] = useState()
 
 
@@ -172,9 +171,7 @@ const Purchase = observer(() => {
             </LinearGradient>
           </TouchableOpacity>
         ))}
-        {/* <TouchableOpacity onPress={() => Linking.openURL('https://apps.apple.com/account/subscriptions')}>
-          <Text>Sg</Text>
-        </TouchableOpacity> */}
+
         <TouchableOpacity style={styles.modalCancelButton} onPress={() => Store._purchase(false)}>
           <Text style={styles.modalCancelButtonText}>Close</Text>
         </TouchableOpacity>

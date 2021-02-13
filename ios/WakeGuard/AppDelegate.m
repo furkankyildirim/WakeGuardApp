@@ -2,13 +2,13 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
-#ifdef FB_SONARKIT_ENABLED
-#import <FlipperKit/FlipperClient.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <Firebase.h>
 #import <RNCPushNotificationIOS.h>
 #import <UserNotifications/UserNotifications.h>
+
+#ifdef FB_SONARKIT_ENABLED
+#import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
 #import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
@@ -50,14 +50,14 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
  [RNCPushNotificationIOS didReceiveLocalNotification:notification];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)appliication didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
   [GMSServices provideAPIKey:@"AIzaSyAYHcLhJnISD6hI-QMKpd1BZaUTvYDOdbE"];
 #ifdef FB_SONARKIT_ENABLED
-  InitializeFlipper(application);
+  InitializeFlipper(appliication);
 #endif
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -74,6 +74,11 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
   [self.window makeKeyAndVisible];
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
+  
+  // Place this code after "[self.window makeKeyAndVisible]" and before "return YES;"
+  UIStoryboard *sb = [UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil];
+  UIViewController *vc = [sb instantiateInitialViewController];
+  rootView.loadingView = vc.view;
     
   return YES;
 }

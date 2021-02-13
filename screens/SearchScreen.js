@@ -7,6 +7,7 @@ import _ from 'lodash'
 import { observer } from 'mobx-react';
 import axios from 'axios';
 import Store from '../assets/store/Store'
+import { strings } from '../assets/store/strings'
 
 const { height, width } = Dimensions.get('window');
 
@@ -33,7 +34,7 @@ export default class SearchScreen extends Component {
   }
 
   getPlaces = _.debounce(value => this.searchPlaces(value), 500)
-  
+
   searchPlaces = async value => {
     if (value !== '') {
       const places = await axios.get(`${AUTOCOMPLETE_API}key=${API_KEY}&input=${value}
@@ -86,7 +87,7 @@ export default class SearchScreen extends Component {
                 <Icon name="magnifier" size={RFValue(18)} color="rgb(55,68,100)" />
                 <TextInput
                   clearButtonMode='while-editing'
-                  placeholder={strings.search_placeholder}
+                  placeholder={Store.targetName !== 'Use to search detailed locations' ? Store.targetName : strings.search_placeholder}
                   numberOfLines={1}
                   style={styles.adress}
                   value={this.state.search}

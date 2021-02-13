@@ -29,9 +29,7 @@ const ActiveAlarm = observer(() => {
     circle1.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)', strokeWidth: 1.5, radius: Store.radius })
     BackgroundGeolocation.start();
     const interval = setInterval(() => {
-      //playSound()
       BackgroundGeolocation.getCurrentLocation(position => {
-        //console.log(position)
         const distance = getPreciseDistance({ latitude: position.latitude, longitude: position.longitude },
           { latitude: Store.latitude, longitude: Store.longitude }, 0.01) - Store.radius;
         console.log(distance)
@@ -74,14 +72,17 @@ const ActiveAlarm = observer(() => {
   }
 
   stopAlarm = () => {
+    BackgroundGeolocation.stop()
     setIsAlarmStopped(true)
     Store._alarm(false)
     SoundPlayer.stop()
     Vibration.cancel();
+    
   }
 
   goUserLocation = async () => {
-    const { coords } = await this.getCurrentPosition()
+    const { coords } = await getCurrentPosition()
+    console.log(coords)
     this.map1.animateToRegion({
       latitude: parseFloat(coords.latitude.toString().substring(0, 7)),
       longitude: parseFloat(coords.longitude.toString().substring(0, 7)),
@@ -189,7 +190,7 @@ const ActiveAlarm = observer(() => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.mainButton} onPress={() =>[Store._alarm(false),navigation.navigate('Home'),BackgroundGeolocation.stop()]}>
+          <TouchableOpacity style={styles.mainButton} onPress={() =>[this.stopAlarm(),navigation.navigate('Home')]}>
             <Text style={styles.mainButtonText}>{strings.cancel_the_alarm}</Text>
           </TouchableOpacity>
         </View>
@@ -300,7 +301,6 @@ const styles = StyleSheet.create({
   },
   mainComponentTitle: {
     fontSize: RFValue(16),
-    // marginLeft: width * 0.0275 * 3 / 2,
     color: "rgba(255,255,255,0.825)",
     marginTop: 3.5,
   },

@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {strings} from './assets/store/strings'
 
-LogBox.ignoreAllLogs(false)
+LogBox.ignoreAllLogs(true)
 const { height, width } = Dimensions.get('window');
 
 const HomeNavigator = createStackNavigator({
@@ -84,11 +84,11 @@ const DrawerNavigator = createDrawerNavigator({
   Support: {
     screen: Support,
     navigationOptions: {
-      drawerLabel: "Support",
+      drawerLabel: `${strings.support}`,
       headerShown: false,
       gestureEnabled: false,
       drawerIcon: ({ tintColor }) => (
-        <Icon name="user" size={RFValue(20)} color={tintColor} />
+        <Icon name="support" size={RFValue(20)} color={tintColor} />
       )
     },
   },

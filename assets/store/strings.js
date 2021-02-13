@@ -43,18 +43,21 @@ export const strings = new LocalizedStrings({
     report_text: "Report a problem",
     suggest_text: "Suggest an improvement",
     ask_question_text: "Ask a question",
+    undefined_adress: 'Undefined Adress',
+    support:'Support'
+
   },
   'tr':{
     search_screen: "Arama Sayfası",
     active_alarm: "Aktif Alarm",
     create_new_alarm: "Yeni Alarm Oluştur",
     create_new_alarm_small: "Yeni alarm oluştur",
-    recent_alarms: "Alarm geçmişi",
-    favorite_alarms: "Favori alarmlar",
+    recent_alarms: "Alarm Geçmişi",
+    favorite_alarms: "Favori Alarmlar",
     delete: "Sil",
     favorite: "Favori",
     date: "Tarih",
-    radius: "Yarıçap",
+    radius: "Mesafe",
     access_location_title: "Uygulama arka planda çalışırken 'WakeGuard'ın konumunuza erişmesine izin verilsin mi?",
     access_location_info: "Uygulamanın konumunuzu arka planda kullanabilmesi için, Konum Servisleri ayarlarında 'Her Zaman' seçeneğini etkinleştirmeniz gerekir.",
     dont_allow: "İzin Verme",
@@ -86,6 +89,8 @@ export const strings = new LocalizedStrings({
     report_text: "Sorun bildir",
     suggest_text: "Öneride bulun",
     ask_question_text: "Soru sor",
+    undefined_adress: 'Tanımsız Adres',
+    support:'Destek'
   },
   'de':{
     search_screen: "Suchbildschirm",
@@ -129,6 +134,8 @@ export const strings = new LocalizedStrings({
     report_text: "Ein problem melden",
     suggest_text: "Schlagen Sie eine Verbesserung vor",
     ask_question_text: "Stelle eine Frage",
+    undefined_adress: 'Undefined Adress',
+    support:'Support'
   },
   'fr':{
     search_screen: "Ecran de recherche",
@@ -172,6 +179,9 @@ export const strings = new LocalizedStrings({
     report_text: "Signaler un probleme",
     suggest_text: "Suggerer une amelioration",
     ask_question_text: "Poser une question",
+    undefined_adress: 'Undefined Adress',
+    support:'Support'
+
   },
   'es':{
     search_screen: "Pantalla de busqueda",
@@ -215,6 +225,8 @@ export const strings = new LocalizedStrings({
     report_text: "Informar un problema",
     suggest_text: "Sugerir una mejora",
     ask_question_text: "Haz una pregunta",
+    undefined_adress: 'Undefined Adress',
+    support:'Support'
   },
   'it':{
     search_screen: "Schermata di ricerca",
@@ -258,4 +270,7 @@ export const strings = new LocalizedStrings({
     report_text: "Segnala un problema",
     suggest_text: "Suggerisci un miglioramento",
     ask_question_text: "Fai una domanda",
+    undefined_adress: 'Undefined Adress',
+    support:'Support'
+
   },});

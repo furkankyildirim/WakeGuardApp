@@ -37,12 +37,12 @@ export default class Usage extends Component {
     return (
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.topComponent}>
-          <TouchableOpacity /*onPress={this.props.navigation.openDrawer}*/ style={styles.menuButton}>
+          <TouchableOpacity onPress={this.props.navigation.openDrawer} style={styles.menuButton}>
             <Icon name="menu" size={RFValue(24)} color="#fff" />
           </TouchableOpacity>
         </View>
         <View style={styles.iconTextContainer}>
-          <Icon style={{marginBottom: width * 0.0375}} name="support" size={RFValue(36)} color="rgba(0,0,0,0.45)"/>
+          <Icon style={{marginBottom: width * 0.0375}} name="support" size={RFValue(36)} color="rgb(255,255,255)"/>
           <Text style={styles.infoText}>{strings.support_description}</Text>
         </View>
         <View>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     width: width*0.8,
     textAlign: "center",
-    color: "rgba(0,0,0,0.575)",
+    color: "rgb(255,255,255)",
   },
   iconTextContainer: {
     display: "flex",

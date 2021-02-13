@@ -16,7 +16,6 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {strings} from '../assets/store/strings'
 import firestore from '@react-native-firebase/firestore';
 
-//import DeviceInfo from 'react-native-device-info';
 
 
 const { height, width } = Dimensions.get('window');
@@ -39,10 +38,10 @@ export default class Home extends Component {
   }
 
   async componentDidMount() {
+    Store._mapReferance(this.map)
     PushNotificationIOS.requestPermissions()
     this.checkPermissions()
     await this.getData()
-    //console.log(DeviceInfo.getUniqueId())
   }
 
   getData = async () => {
@@ -78,7 +77,6 @@ export default class Home extends Component {
     } else {
       permission = await Permissions.request('location')
       if (permission === 'authorized') {
-        // Works on both Android and iOS
         Alert.alert(
           `${strings.access_location_title}`,
           `${strings.access_location_info}`,
@@ -137,11 +135,8 @@ export default class Home extends Component {
     setTimeout(() => {
       this.setState({ showMap: true })
       this.circle.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)' })
-
+      Store._mapReferance(this.map)
     }, 1)
-
-
-
   }
 
   goUserLocation = async () => {
@@ -166,15 +161,19 @@ export default class Home extends Component {
     })
   }
 
-  getPositionInfo = async () => {
+  getPositionInfo = async  () => {
     const info = await axios.get(`${GEOCODING_API}key=${API_KEY}&latlng=${Store.latitude},${Store.longitude}
     &location_type=ROOFTOP&result_type=street_address`);
-    Store._targetName(info.data.results[0].formatted_address)
+    if(info.data.status === 'OK'){
+      Store._targetName(info.data.results[0].formatted_address)
+    }else{
+      Store._targetName(strings.undefined_adress)
+    }
   }
 
   setNavigate = async () => {
     Store._radius(this.state.radius)
-    //await this.getPositionInfo()
+    await this.getPositionInfo()
 
     const monthNames = [strings.january,strings.february,strings.march,strings.april,strings.may,strings.june,
       strings.july,strings.august,strings.september,strings.october,strings.november,strings.december];
