@@ -18,7 +18,6 @@ export default class SearchScreen extends Component {
     this.state = {
       search: '',
       predictions: '',
-
     };
   }
 
@@ -51,7 +50,6 @@ export default class SearchScreen extends Component {
     console.log(targetLocation.lat, targetLocation.lng)
     Store._latitude(targetLocation.lat)
     Store._longitude(targetLocation.lng)
-
   }
 
   renderPredictions = ({ item, index }) => {

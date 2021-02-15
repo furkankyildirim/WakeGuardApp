@@ -13,10 +13,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Purchase from '../assets/components/Purchase';
 import { mapStyle } from '../assets/store/MapStyle';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {strings} from '../assets/store/strings'
+import { strings } from '../assets/store/strings'
 import firestore from '@react-native-firebase/firestore';
-
-
 
 const { height, width } = Dimensions.get('window');
 
@@ -114,7 +112,6 @@ export default class Home extends Component {
         )
         this.setState({ userlocation: false })
       }
-
     }
   }
 
@@ -161,12 +158,12 @@ export default class Home extends Component {
     })
   }
 
-  getPositionInfo = async  () => {
+  getPositionInfo = async () => {
     const info = await axios.get(`${GEOCODING_API}key=${API_KEY}&latlng=${Store.latitude},${Store.longitude}
     &location_type=ROOFTOP&result_type=street_address`);
-    if(info.data.status === 'OK'){
+    if (info.data.status === 'OK') {
       Store._targetName(info.data.results[0].formatted_address)
-    }else{
+    } else {
       Store._targetName(strings.undefined_adress)
     }
   }
@@ -175,8 +172,8 @@ export default class Home extends Component {
     Store._radius(this.state.radius)
     await this.getPositionInfo()
 
-    const monthNames = [strings.january,strings.february,strings.march,strings.april,strings.may,strings.june,
-      strings.july,strings.august,strings.september,strings.october,strings.november,strings.december];
+    const monthNames = [strings.january, strings.february, strings.march, strings.april, strings.may, strings.june,
+    strings.july, strings.august, strings.september, strings.october, strings.november, strings.december];
 
     const date = new Date()
     console.log(date)
@@ -193,7 +190,7 @@ export default class Home extends Component {
       }
     }
     console.log(history)
-    if(Store.token >0){
+    if (Store.token > 0) {
       Store._alarm(true)
       Store._addHistory(history)
       AsyncStorage.setItem('History', Store.history)
@@ -202,8 +199,7 @@ export default class Home extends Component {
         token: Store.token
       }).catch(e => console.log(e))
       this.props.navigation.navigate("ActiveAlarm")
-    }else{Store._purchase(true)}
-
+    } else { Store._purchase(true) }
   }
 
   render() {
@@ -250,14 +246,14 @@ export default class Home extends Component {
                 </TouchableOpacity>
                 <View style={styles.alarmSettings}>
                   <View style={styles.chooseDestinationContainer}>
-                  <Text style={styles.mainComponentTitle}>{strings.choose_destination}</Text>
+                    <Text style={styles.mainComponentTitle}>{strings.choose_destination}</Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate("SearchScreen")} style={styles.locationInput}>
                       <Icon name="magnifier" size={RFValue(16)} color="rgba(155,155,155,0.875)" />
                       <Text numberOfLines={1} style={styles.adress}>{Store.targetName}</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[styles.setRadiusContainer]}>
-                  <Text style={styles.mainComponentTitle}>{strings.set_radius_m}</Text>
+                    <Text style={styles.mainComponentTitle}>{strings.set_radius_m}</Text>
                     <View style={styles.radiusInput}>
                       <TouchableOpacity onPress={() => { this.setState({ radius: 50 }) }} style={[styles.radiusOption, styles.radiusOption1, { backgroundColor: this.state.radius === 50 ? this.state.activeRadiusColor : this.state.passiveRadiusColor }]}>
                         <Text style={[styles.radiusOptionText, { color: this.state.radius === 50 ? this.state.radiusTextColor : this.state.passiveRadiusValueTextColor }]}>50</Text>
@@ -281,7 +277,7 @@ export default class Home extends Component {
                   </View>
                 </View>
                 <TouchableOpacity onPress={() => this.setNavigate()} style={styles.mainButton}>
-                <Text style={styles.mainButtonText}>{strings.create_new_alarm_small}</Text>
+                  <Text style={styles.mainButtonText}>{strings.create_new_alarm_small}</Text>
                 </TouchableOpacity>
               </View>
             </SafeAreaView>
@@ -290,7 +286,6 @@ export default class Home extends Component {
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
             <ActivityIndicator size="small" />
           </View>}
-
       </View>
     );
   }

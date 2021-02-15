@@ -3,16 +3,15 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions, Tex
 import { NavigationContext } from 'react-navigation';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
-const { height, width } = Dimensions.get('window');
 import Swipeout from 'react-native-swipeout';
 import Store from '../assets/store/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { observer } from 'mobx-react'
-import {strings} from '../assets/store/strings'
+import { strings } from '../assets/store/strings'
 import firestore from '@react-native-firebase/firestore';
 import Purchase from '../assets/components/Purchase';
 
-
+const { height, width } = Dimensions.get('window');
 
 @observer
 export default class RecentAlarms extends Component {
@@ -29,14 +28,14 @@ export default class RecentAlarms extends Component {
     Store._longitudeDelta(item.region.longitudeDelta)
     Store._radius(item.radius)
 
-    if(Store.token >0){
+    if (Store.token > 0) {
       Store._alarm(true)
       Store._token(Store.token - 1);
       firestore().collection('Users').doc(Store.userId).update({
         token: Store.token
       }).catch(e => console.log(e))
       this.props.navigation.navigate("ActiveAlarm")
-    }else{Store._purchase(true)}
+    } else { Store._purchase(true) }
   }
 
   renderPredictions = ({ item, index }) => {
@@ -67,7 +66,7 @@ export default class RecentAlarms extends Component {
             <Icon name="clock" size={RFValue(28)} color="#2284F0" />
           </View>
           <View style={styles.listItemTextContainer}>
-          <Text numberOfLines={1} style={styles.listItemTitle}>{strings.date}: {item.date} - {strings.radius}: {item.radius}m</Text>
+            <Text numberOfLines={1} style={styles.listItemTitle}>{strings.date}: {item.date} - {strings.radius}: {item.radius}m</Text>
             <Text numberOfLines={1} style={styles.listItemText}>{item.adress}</Text>
           </View>
           <TouchableOpacity style={styles.mapButton} onPress={() => this.setNavigate(item)}>

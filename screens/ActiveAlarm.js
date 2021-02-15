@@ -14,7 +14,7 @@ import { mapStyle } from '../assets/store/MapStyle';
 import { getPreciseDistance } from 'geolib';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
-import {strings} from '../assets/store/strings'
+import { strings } from '../assets/store/strings'
 
 const { height, width } = Dimensions.get('window');
 
@@ -77,7 +77,6 @@ const ActiveAlarm = observer(() => {
     Store._alarm(false)
     SoundPlayer.stop()
     Vibration.cancel();
-    
   }
 
   goUserLocation = async () => {
@@ -119,8 +118,6 @@ const ActiveAlarm = observer(() => {
     AsyncStorage.setItem('Favorite', Store.favorite)
   }
 
-
-
   return (
     <View style={styles.mainContainer}>
       <Modal isVisible={isModalVisible}>
@@ -129,7 +126,7 @@ const ActiveAlarm = observer(() => {
             <Icon name="close" size={RFValue(112.5)} color="#fff" />
           </TouchableOpacity>
           <View style={[styles.buttonCon, { display: isAlarmStopped === false ? "none" : "flex" }]}>
-            <TouchableOpacity style={styles.addToFavsButton} onPress={() => [this.addFavorite(),this.closeModal()]}>
+            <TouchableOpacity style={styles.addToFavsButton} onPress={() => [this.addFavorite(), this.closeModal()]}>
               <Text style={styles.modalCancelButtonText}>{strings.add_to_favorites}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalCancelButton} onPress={() => this.closeModal()}>
@@ -190,7 +187,7 @@ const ActiveAlarm = observer(() => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.mainButton} onPress={() =>[this.stopAlarm(),navigation.navigate('Home')]}>
+          <TouchableOpacity style={styles.mainButton} onPress={() => [this.stopAlarm(), navigation.navigate('Home')]}>
             <Text style={styles.mainButtonText}>{strings.cancel_the_alarm}</Text>
           </TouchableOpacity>
         </View>

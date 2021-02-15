@@ -13,15 +13,12 @@ import firestore from '@react-native-firebase/firestore';
 const { height, width } = Dimensions.get('window');
 const productIDs = ['com.wake.guard.weekly', 'com.wake.guard.monthly', 'com.wake.guard.yearly']
 
-
 const Purchase = observer(() => {
   const [products, setProducts] = useState([]);
   const [purchaseErrorSubscription, setPurchaseErrorSubscription] = useState()
 
-
   useEffect(() => {
     setApp()
-
   }, [])
 
   setApp = async () => {
@@ -55,7 +52,7 @@ const Purchase = observer(() => {
                 originalTransactionDateIOS: purchase.originalTransactionDateIOS,
                 originalTransactionIdentifierIOS: purchase.originalTransactionIdentifierIOS,
               }
-              
+
               await firestore().collection('Users').doc(Store.userId).update(userData).catch(e => console.log(e))
               Store._deviceId(userData.deviceId)
               Store._token(userData.token)
@@ -76,14 +73,12 @@ const Purchase = observer(() => {
         }
       })
     })
-
   }
 
   connectFirebase = async () => {
     const deviceID = DeviceInfo.getUniqueId();
     console.log(deviceID)
     const data = await firestore().collection('Users').where('deviceId', '==', deviceID).get();
-    
 
     if (!data.empty) {
       const user = data.docs[0]
@@ -91,20 +86,43 @@ const Purchase = observer(() => {
       const userData = user.data()
 
       console.log(user.id, user.data())
+      if (userData.productId !== null) {
+        let ms;
+        if (userData.productId === 'com.wake.guard.weekly') {
+          ms = 604800000;
+          console.log(ms)
+        } else if (userData.productId === 'com.wake.guard.monthly') {
+          ms = 2592000000;
+          console.log(ms)
+        } else if (userData.productId === 'com.wake.guard.yearly') {
+          ms = 31556952000;
+          console.log(ms)
+        }
 
-      let ms;
-      if (userData.productId === 'com.wake.guard.weekly') {
-        ms = 604800000;
-        console.log(ms)
-      } else if (userData.productId === 'com.wake.guard.monthly') {
-        ms = 2592000000;
-        console.log(ms)
-      } else if (userData.productId === 'com.wake.guard.yearly') {
-        ms = 31556952000;
-        console.log(ms)
-      }
-
-      if (new Date().getTime() <= ms + userData.transactionDate) {
+        if (new Date().getTime() <= ms + userData.transactionDate) {
+          Store._userId(userId)
+          Store._deviceId(userData.deviceId)
+          Store._token(userData.token)
+          Store._productId(userData.productId)
+          Store._transactionId(userData.transactionId)
+          Store._transactionReceipt(userData.transactionReceipt)
+          Store._transactionDate(userData.transactionDate)
+          Store._originalTransactionDateIOS(userData.originalTransactionDateIOS)
+          Store._originalTransactionIdentifierIOS(userData.originalTransactionIdentifierIOS)
+          console.log('ürünler yüklendi')
+        } else {
+          Store._userId(userId)
+          Store._deviceId(userData.deviceId)
+          Store._token(0)
+          Store._productId(null)
+          Store._transactionId(null)
+          Store._transactionReceipt(null)
+          Store._transactionDate(null)
+          Store._originalTransactionDateIOS(null)
+          Store._originalTransactionIdentifierIOS(null)
+          console.log('süre doldu')
+        }
+      } else {
         Store._userId(userId)
         Store._deviceId(userData.deviceId)
         Store._token(userData.token)
@@ -115,19 +133,7 @@ const Purchase = observer(() => {
         Store._originalTransactionDateIOS(userData.originalTransactionDateIOS)
         Store._originalTransactionIdentifierIOS(userData.originalTransactionIdentifierIOS)
         console.log('ürünler yüklendi')
-      } else { 
-        Store._userId(userId)
-        Store._deviceId(userData.deviceId)
-        Store._token(0)
-        Store._productId(null)
-        Store._transactionId(null)
-        Store._transactionReceipt(null)
-        Store._transactionDate(null)
-        Store._originalTransactionDateIOS(null)
-        Store._originalTransactionIdentifierIOS(null)
-        console.log('süre doldu') 
       }
-
     } else {
       const userData = {
         deviceId: deviceID,
@@ -156,7 +162,6 @@ const Purchase = observer(() => {
   }
 
 
-
   return (
     <Modal isVisible={Store.purchase}>
       <View style={styles.modal}>
@@ -171,7 +176,6 @@ const Purchase = observer(() => {
             </LinearGradient>
           </TouchableOpacity>
         ))}
-
         <TouchableOpacity style={styles.modalCancelButton} onPress={() => Store._purchase(false)}>
           <Text style={styles.modalCancelButtonText}>Close</Text>
         </TouchableOpacity>

@@ -1,7 +1,7 @@
 import LocalizedStrings from 'react-native-localization'
 
 export const strings = new LocalizedStrings({
-  'en':{
+  'en': {
     search_screen: "Search Screen",
     active_alarm: "Active Alarm",
     create_new_alarm: "Create New Alarm",
@@ -19,7 +19,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "Apparently, you haven't allowed the app to use your location in the Location Services settings",
     no_access_location_info: "In order for us to use your location in the background, you must enable the 'Always' option in the Location Services settings.",
     january: "January",
-    february :"February",
+    february: "February",
     march: "March",
     april: "April",
     may: "May",
@@ -44,10 +44,9 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggest an improvement",
     ask_question_text: "Ask a question",
     undefined_adress: 'Undefined Adress',
-    support:'Support'
-
+    support: 'Support'
   },
-  'tr':{
+  'tr': {
     search_screen: "Arama Sayfası",
     active_alarm: "Aktif Alarm",
     create_new_alarm: "Yeni Alarm Oluştur",
@@ -65,7 +64,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "Görünüşe göre, uygulamanın Konum Servisleri ayarlarında konumunuzu kullanmasına izin vermemişsiniz",
     no_access_location_info: "Uygulamanın konumunuzu arka planda kullanabilmesi için, Konum Servisleri ayarlarında 'Her Zaman' seçeneğini etkinleştirmeniz gerekir.",
     january: "Ocak",
-    february :"Şubat",
+    february: "Şubat",
     march: "Mart",
     april: "Nisan",
     may: "Mayıs",
@@ -90,9 +89,9 @@ export const strings = new LocalizedStrings({
     suggest_text: "Öneride bulun",
     ask_question_text: "Soru sor",
     undefined_adress: 'Tanımsız Adres',
-    support:'Destek'
+    support: 'Destek'
   },
-  'de':{
+  'de': {
     search_screen: "Suchbildschirm",
     active_alarm: "Aktiver Alarm",
     create_new_alarm: "Neuen Alarm Erstellen",
@@ -110,7 +109,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "Anscheinend haben Sie der App nicht erlaubt, Ihren Standort in den Location Services-Einstellungen zu verwenden",
     no_access_location_info: "Damit wir Ihren Standort im Hintergrund verwenden können, müssen Sie die Option 'Immer' in den Einstellungen der Standortdienste aktivieren.",
     january: "Januar",
-    february :"Februar",
+    february: "Februar",
     march: "Marz",
     april: "April",
     may: "Mai",
@@ -135,9 +134,9 @@ export const strings = new LocalizedStrings({
     suggest_text: "Schlagen Sie eine Verbesserung vor",
     ask_question_text: "Stelle eine Frage",
     undefined_adress: 'Undefined Adress',
-    support:'Support'
+    support: 'Support'
   },
-  'fr':{
+  'fr': {
     search_screen: "Ecran de recherche",
     active_alarm: "Alarme active",
     create_new_alarm: "Creer une nouvelle alarme",
@@ -155,7 +154,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "Apparemment, vous n'avez pas autorise l'application à utiliser votre position dans les parametres des services de localisation",
     no_access_location_info: "Pour que nous puissions utiliser votre position en arriere-plan, vous devez activer l'option 'Toujours' dans les parametres des services de localisation.",
     january: "Janvier",
-    february :"Fevrier",
+    february: "Fevrier",
     march: "Mars",
     april: "Avril",
     may: "May",
@@ -180,10 +179,9 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggerer une amelioration",
     ask_question_text: "Poser une question",
     undefined_adress: 'Undefined Adress',
-    support:'Support'
-
+    support: 'Support'
   },
-  'es':{
+  'es': {
     search_screen: "Pantalla de busqueda",
     active_alarm: "Alarma activa",
     create_new_alarm: "Crear nueva alarma",
@@ -201,7 +199,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "Aparentemente, no permitiste que la aplicacion use tu ubicación en la configuracion de los Servicios de ubicacion",
     no_access_location_info: "Para que podamos usar su ubicacion en segundo plano, debe habilitar la opcion 'Siempre' en la configuración de Servicios de ubicacion.",
     january: "Enero",
-    february :"Febrero",
+    february: "Febrero",
     march: "Marzo",
     april: "Abril",
     may: "Mayo",
@@ -226,9 +224,9 @@ export const strings = new LocalizedStrings({
     suggest_text: "Sugerir una mejora",
     ask_question_text: "Haz una pregunta",
     undefined_adress: 'Undefined Adress',
-    support:'Support'
+    support: 'Support'
   },
-  'it':{
+  'it': {
     search_screen: "Schermata di ricerca",
     active_alarm: "Allarme attivo",
     create_new_alarm: "Crea nuovo allarme",
@@ -246,7 +244,7 @@ export const strings = new LocalizedStrings({
     no_access_location_title: "A quanto pare, non hai consentito all'app di utilizzare la tua posizione nelle impostazioni dei servizi di localizzazione",
     no_access_location_info: "Per consentirci di utilizzare la tua posizione in background, devi abilitare l'opzione 'Sempre' nelle impostazioni dei servizi di localizzazione.",
     january: "Gennaio",
-    february :"Febbraio",
+    february: "Febbraio",
     march: "Marzo",
     april: "Aprile",
     may: "Maggio",
@@ -271,6 +269,6 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggerisci un miglioramento",
     ask_question_text: "Fai una domanda",
     undefined_adress: 'Undefined Adress',
-    support:'Support'
-
-  },});
+    support: 'Support'
+  },
+});

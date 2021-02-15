@@ -15,12 +15,11 @@ class Store {
     @observable remaining
     @observable history = '[]'
     @observable favorite = '[]'
-
     @observable userId = null
-    @observable deviceId = null 
-    @observable token = null 
+    @observable deviceId = null
+    @observable token = null
     @observable productId = null
-    @observable transactionId = null 
+    @observable transactionId = null
     @observable transactionReceipt = null
     @observable transactionDate = null
     @observable originalTransactionDateIOS = null
@@ -32,18 +31,15 @@ class Store {
         valueFloat = parseFloat(valueText)
         this.latitude = valueFloat
     }
-
     @action _longitude = (value) => {
         valueText = value.toString();
         valueText = valueText.substring(0, 7)
         valueFloat = parseFloat(valueText)
         this.longitude = valueFloat
     }
-
     @action _latitudeDelta = (value) => {
         this.latitudeDelta = value
     }
-
     @action _longitudeDelta = (value) => {
         this.longitudeDelta = value
     }
@@ -129,11 +125,6 @@ class Store {
     @action _originalTransactionIdentifierIOS = value => {
         this.originalTransactionIdentifierIOS = value
     }
-    
-
 }
-
-
-
 
 export default new Store()

@@ -2,16 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key></key>
-	<string></string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.wake.guard</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>WakeGuard</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Dark</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -25,7 +25,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fb</string>
@@ -54,13 +54,29 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSExceptionDomains</key>
-		<dict/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSContactsUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSMotionUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -100,6 +116,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

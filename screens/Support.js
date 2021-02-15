@@ -5,7 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import email from 'react-native-email'
 import Store from '../assets/store/Store'
 import { observer } from 'mobx-react';
-import {strings} from '../assets/store/strings';
+import { strings } from '../assets/store/strings';
 
 const { height, width } = Dimensions.get('window');
 
@@ -14,22 +14,22 @@ export default class Usage extends Component {
   handleEmail1 = () => {
     const to = ['wakeguard@gmail.com']
     email(to, {
-        subject: `Report from user ${Store.userId}`,
-        body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
+      subject: `Report from user ${Store.userId}`,
+      body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
     }).catch(console.error)
   }
   handleEmail2 = () => {
     const to = ['wakeguard@gmail.com']
     email(to, {
-        subject: `Suggestion from user ${Store.userId}`,
-        body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
+      subject: `Suggestion from user ${Store.userId}`,
+      body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
     }).catch(console.error)
   }
   handleEmail3 = () => {
     const to = ['wakeguard@gmail.com']
     email(to, {
-        subject: `Question from user ${Store.userId}`,
-        body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
+      subject: `Question from user ${Store.userId}`,
+      body: '<<< Please do not delete your user id from the subject. Otherwise, we can not help you. >>>'
     }).catch(console.error)
   }
 
@@ -42,7 +42,7 @@ export default class Usage extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.iconTextContainer}>
-          <Icon style={{marginBottom: width * 0.0375}} name="support" size={RFValue(36)} color="rgb(255,255,255)"/>
+          <Icon style={{ marginBottom: width * 0.0375 }} name="support" size={RFValue(36)} color="rgb(255,255,255)" />
           <Text style={styles.infoText}>{strings.support_description}</Text>
         </View>
         <View>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: RFValue(15),
     fontWeight: "400",
-    width: width*0.8,
+    width: width * 0.8,
     textAlign: "center",
     color: "rgb(255,255,255)",
   },
