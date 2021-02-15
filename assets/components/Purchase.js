@@ -36,9 +36,9 @@ const Purchase = observer(() => {
             if (purchase.transactionId !== Store.transactionId) {
               let newToken;
               if (purchase.productId === 'com.wake.guard.weekly') {
-                newToken = 10;
+                newToken = 15;
               } else if (purchase.productId === 'com.wake.guard.monthly') {
-                newToken = 100;
+                newToken = 75;
               } else if (purchase.productId === 'com.wake.guard.yearly') {
                 newToken = 1000;
               }
