@@ -1,4 +1,4 @@
-<h1 style="align-items: center;justify-content: center;">
+<h1>
     <img src="https://github.com/furkannyildirim/WakeGuardApp/blob/master/ios/WakeGuard/Images.xcassets/AppIcon.appiconset/wg-icon-80px.png"/>
     WakeGuard App
 </h1>
