@@ -6,6 +6,6 @@
 WakeGuard is a location tracking and alarm application which is written with React Native.
 
 WakeGuard adjusts how many meters to stay at your target location and informs you when the distance you set to your target location is reached.
-<h1></h1>
+<h3></h3>
 
 Created by [Furkan K. YILDIRIM](https://github.com/furkannyildirim) and [K. Sergen ÖZEL](https://github.com/ksergenozel)
