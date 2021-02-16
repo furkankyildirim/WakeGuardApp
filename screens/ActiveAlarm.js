@@ -22,8 +22,6 @@ const ActiveAlarm = observer(() => {
   const navigation = useContext(NavigationContext);
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isAlarmStopped, setIsAlarmStopped] = useState(false)
-  const [remaining, setRemaining] = useState();
-
 
   useEffect(() => {
     circle1.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)', strokeWidth: 1.5, radius: Store.radius })
@@ -33,7 +31,6 @@ const ActiveAlarm = observer(() => {
         const distance = getPreciseDistance({ latitude: position.latitude, longitude: position.longitude },
           { latitude: Store.latitude, longitude: Store.longitude }, 0.01) - Store.radius;
         console.log(distance)
-        setRemaining(distance)
         Store._remaining(distance)
         if (Store.remaining <= 0 && Store.alarm) {
           PushNotificationIOS.presentLocalNotification({
@@ -44,7 +41,7 @@ const ActiveAlarm = observer(() => {
             isSilent: false,
             soundName: 'default',
           });
-          playSound()
+          this.playSound()
           Vibration.vibrate([1000], true);
           setIsModalVisible(true)
           BackgroundGeolocation.stop()

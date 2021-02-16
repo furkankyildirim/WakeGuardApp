@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import email from 'react-native-email'
@@ -59,6 +59,14 @@ export default class Usage extends Component {
             <Text style={styles.buttonText}>{strings.ask_question_text}</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://sites.google.com/view/wakeguard-app/privacy-policy')}>
+          <Text style={{ color: '#fff' }} >Privacy Policy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://sites.google.com/view/wakeguard-app/terms-conditions')}>
+          <Text style={{ color: '#fff' }}>Terms of Use</Text>
+        </TouchableOpacity>
         <Text style={{ fontSize: RFValue(12.5), color: "rgba(0,0,0,0.575)", marginBottom: width * 0.0275 }}>38-454-5123-4324</Text>
       </SafeAreaView>
     );

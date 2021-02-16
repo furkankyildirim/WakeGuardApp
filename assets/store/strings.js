@@ -44,7 +44,12 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggest an improvement",
     ask_question_text: "Ask a question",
     undefined_adress: 'Undefined Adress',
-    support: 'Support'
+    support: 'Support',
+    restore_complated: 'Restore purchase completed successfully.',
+    restore_failed: 'Restore purchase failed.',
+    package_expired: 'Your package has expired.',
+    restore_purchase: 'Restore Purchase',
+    close: 'Close',
   },
   'tr': {
     search_screen: "Arama Sayfası",
@@ -89,7 +94,12 @@ export const strings = new LocalizedStrings({
     suggest_text: "Öneride bulun",
     ask_question_text: "Soru sor",
     undefined_adress: 'Tanımsız Adres',
-    support: 'Destek'
+    support: 'Destek',
+    restore_complated: 'Satın alma işlemi başarıyla tamamlandı.',
+    restore_failed: 'Satın alma işlemi geri yüklenemedi.',
+    package_expired: 'Paketinizin süresi doldu.',
+    restore_purchase: 'Satın Alınanları Geri Yükle',
+    close: 'Kapat'
   },
   'de': {
     search_screen: "Suchbildschirm",
@@ -134,7 +144,12 @@ export const strings = new LocalizedStrings({
     suggest_text: "Schlagen Sie eine Verbesserung vor",
     ask_question_text: "Stelle eine Frage",
     undefined_adress: 'Undefined Adress',
-    support: 'Support'
+    support: 'Support',
+    restore_complated: 'Kauf erfolgreich abgeschlossen.',
+    restore_failed: 'Kauf wiederhergestellt fehlgeschlagen.',
+    package_expired: 'Ihr Paket ist abgelaufen.',
+    restore_purchase: 'Kauf wiederherstellen',
+    close: 'Schließen',
   },
   'fr': {
     search_screen: "Ecran de recherche",
@@ -179,7 +194,12 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggerer une amelioration",
     ask_question_text: "Poser une question",
     undefined_adress: 'Undefined Adress',
-    support: 'Support'
+    support: 'Support',
+    restore_complated: 'Achat de restauration terminé avec succès.',
+    restore_failed: "La restauration de l'achat a échoué.",
+    package_expired: 'Votre package a expiré.',
+    restore_purchase: "Restaurer l'achat",
+    close: 'Fermer',
   },
   'es': {
     search_screen: "Pantalla de busqueda",
@@ -224,7 +244,12 @@ export const strings = new LocalizedStrings({
     suggest_text: "Sugerir una mejora",
     ask_question_text: "Haz una pregunta",
     undefined_adress: 'Undefined Adress',
-    support: 'Support'
+    support: 'Support',
+    restore_complated: 'Restaurar compra completada correctamente.',
+    restore_failed: 'Falló la compra de restauración.',
+    package_expired: 'Su paquete ha expirado.',
+    restore_purchase: 'Restaurar compra',
+    close: 'Cerca',
   },
   'it': {
     search_screen: "Schermata di ricerca",
@@ -269,6 +294,11 @@ export const strings = new LocalizedStrings({
     suggest_text: "Suggerisci un miglioramento",
     ask_question_text: "Fai una domanda",
     undefined_adress: 'Undefined Adress',
-    support: 'Support'
+    support: 'Support',
+    restore_complated: "Ripristino acquisto completato con successo.",
+    restore_failed: "Ripristino acquisto non riuscito.",
+    package_expired: "Il tuo pacchetto è scaduto.",
+    restore_purchase: "Restore Purchase",
+    close: "Chiudi",
   },
 });

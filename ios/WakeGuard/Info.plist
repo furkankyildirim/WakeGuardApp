@@ -66,11 +66,11 @@
 	<key>NSContactsUsageDescription</key>
 	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>NSPhotoLibraryUsageDescription</key>
