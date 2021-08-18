@@ -11,8 +11,8 @@ WakeGuard adjusts how many meters to stay at your target location and informs yo
 
 ### App Images
 <div style="justify-content: space-between;flex-direction: column;">
-    <img src="https://github.com/furkannyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb.png" width="30%" height="auto"/>
-    <img src="https://github.com/furkannyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-2.png" width="30%" height="auto"/>
-    <img src="https://github.com/furkannyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-3.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-2.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-3.png" width="30%" height="auto"/>
 </div>
 
