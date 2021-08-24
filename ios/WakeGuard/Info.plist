@@ -4,8 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>UIUserInterfaceStyle</key>
-    <string>Light</string>
 	<key>CFBundleDisplayName</key>
 	<string>WakeGuard</string>
 	<key>CFBundleExecutable</key>
