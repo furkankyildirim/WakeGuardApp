@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions, TextInput, FlatList } from 'react-native';
-import { NavigationContext } from 'react-navigation';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
 import Swipeout from 'react-native-swipeout';
@@ -8,18 +7,10 @@ import Store from '../assets/store/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { observer } from 'mobx-react'
 import { strings } from '../assets/store/strings'
-import firestore from '@react-native-firebase/firestore';
-import Purchase from '../assets/components/Purchase';
 
 const { height, width } = Dimensions.get('window');
 
-@observer
-export default class RecentAlarms extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
+const RecentAlarms = observer(({navigation}) => {
 
   setNavigate = item => {
     Store._latitude(item.region.latitude)
@@ -27,15 +18,9 @@ export default class RecentAlarms extends Component {
     Store._latitudeDelta(item.region.latitudeDelta)
     Store._longitudeDelta(item.region.longitudeDelta)
     Store._radius(item.radius)
-
-    if (Store.token > 0) {
-      Store._alarm(true)
-      Store._token(Store.token - 1);
-      firestore().collection('Users').doc(Store.userId).update({
-        token: Store.token
-      }).catch(e => console.log(e))
-      this.props.navigation.navigate("ActiveAlarm")
-    } else { Store._purchase(true) }
+    
+    Store._alarm(true)
+    navigation.navigate("ActiveAlarm")
   }
 
   renderPredictions = ({ item, index }) => {
@@ -77,29 +62,33 @@ export default class RecentAlarms extends Component {
     )
   }
 
-  render() {
-    return (
-      <SafeAreaView style={styles.mainContainer}>
-        <Purchase />
-        <View style={styles.topComponent}>
-          <TouchableOpacity onPress={this.props.navigation.openDrawer} style={styles.menuButton}>
-            <Icon name="menu" size={RFValue(24)} color="#fff" />
-          </TouchableOpacity>
+  return (
+    <SafeAreaView style={styles.mainContainer}>
+      <View style={styles.topComponent}>
+        <TouchableOpacity onPress={()=>navigation.goBack()} style={styles.menuButton}>
+          <Icon name="arrow-left" size={RFValue(18)} color="#fff" />
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.title}>{strings.recent_alarms}</Text>
         </View>
-        <FlatList
-          renderItem={this.renderPredictions}
-          keyExtractor={(item) => item.number}
-          data={JSON.parse(Store.history)}
-          pagingEnabled={true}
-          showsVerticalScrollIndicator={false}
-          style={styles.listComponent}
-          horizontal={false}
-        />
-        <View style={styles.bottomSafeAreaViewBackgroundColor} />
-      </SafeAreaView>
-    );
-  }
-}
+        <View style={styles.menuButton}/>
+      </View>
+      <FlatList
+        renderItem={this.renderPredictions}
+        keyExtractor={(item) => item.number}
+        data={JSON.parse(Store.history)}
+        pagingEnabled={true}
+        showsVerticalScrollIndicator={false}
+        style={styles.listComponent}
+        horizontal={false}
+      />
+      <View style={styles.bottomSafeAreaViewBackgroundColor} />
+    </SafeAreaView>
+  );
+
+})
+
+export default RecentAlarms;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -118,11 +107,14 @@ const styles = StyleSheet.create({
     marginTop: width * 0.02,
     paddingBottom: width * 0.0275,
   },
+  title:{
+    color: "#FFFFFF",
+    fontSize: RFValue(16.5),
+    fontWeight:"500"
+  },
   menuButton: {
     height: width * 0.115,
     width: width * 0.115,
-    backgroundColor: "rgba(10,10,10,0.6)",
-    borderRadius: 8,
     marginLeft: width * 0.0275,
     display: "flex",
     justifyContent: "center",

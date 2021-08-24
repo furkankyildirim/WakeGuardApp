@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { NavigationContext } from 'react-navigation';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Vibration } from 'react-native';
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
@@ -18,10 +17,11 @@ import { strings } from '../assets/store/strings'
 
 const { height, width } = Dimensions.get('window');
 
-const ActiveAlarm = observer(() => {
-  const navigation = useContext(NavigationContext);
+const ActiveAlarm = observer(({navigation}) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isAlarmStopped, setIsAlarmStopped] = useState(false)
+
+  const map = useRef(null);
 
   useEffect(() => {
     circle1.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)', strokeWidth: 1.5, radius: Store.radius })
@@ -36,12 +36,12 @@ const ActiveAlarm = observer(() => {
           PushNotificationIOS.presentLocalNotification({
             alertTitle: `${strings.notification_title}`,
             alertBody: `${strings.notification_info}`,
-            applicationIconBadgeNumber: 1,
+            applicationIconBadgeNumber: 0,
             category: 'SALE_NOTIFICATION',
             isSilent: false,
             soundName: 'default',
           });
-          this.playSound()
+          playSound()
           Vibration.vibrate([1000], true);
           setIsModalVisible(true)
           BackgroundGeolocation.stop()
@@ -69,7 +69,7 @@ const ActiveAlarm = observer(() => {
   }
 
   stopAlarm = () => {
-    BackgroundGeolocation.stop()
+    BackgroundGeolocation.stop();
     setIsAlarmStopped(true)
     Store._alarm(false)
     SoundPlayer.stop()
@@ -79,7 +79,7 @@ const ActiveAlarm = observer(() => {
   goUserLocation = async () => {
     const { coords } = await getCurrentPosition()
     console.log(coords)
-    this.map1.animateToRegion({
+    map.current.animateToRegion({
       latitude: parseFloat(coords.latitude.toString().substring(0, 7)),
       longitude: parseFloat(coords.longitude.toString().substring(0, 7)),
       latitudeDelta: 0.0075,
@@ -88,7 +88,7 @@ const ActiveAlarm = observer(() => {
   }
 
   goTargetLocation = () => {
-    this.map1.animateToRegion({
+    map.current.animateToRegion({
       latitude: Store.latitude,
       longitude: Store.longitude,
       latitudeDelta: Store.latitudeDelta,
@@ -119,7 +119,7 @@ const ActiveAlarm = observer(() => {
     <View style={styles.mainContainer}>
       <Modal isVisible={isModalVisible}>
         <View style={styles.modal}>
-          <TouchableOpacity onPress={() => this.stopAlarm()} style={[styles.stopTheAlarmButton, { display: isAlarmStopped === false ? "flex" : "none" }]}>
+          <TouchableOpacity onPress={() => stopAlarm()} style={[styles.stopTheAlarmButton, { display: isAlarmStopped === false ? "flex" : "none" }]}>
             <Icon name="close" size={RFValue(112.5)} color="#fff" />
           </TouchableOpacity>
           <View style={[styles.buttonCon, { display: isAlarmStopped === false ? "none" : "flex" }]}>
@@ -134,7 +134,7 @@ const ActiveAlarm = observer(() => {
       </Modal>
       <SafeAreaView style={styles.componentContainer}>
         <MapView style={styles.map}
-          ref={map1 => [(this.map1 = map1)]}
+          ref={map}
           provider={PROVIDER_GOOGLE}
           rotateEnabled={true}
           showsUserLocation={true}
@@ -184,7 +184,7 @@ const ActiveAlarm = observer(() => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.mainButton} onPress={() => [this.stopAlarm(), navigation.navigate('Home')]}>
+          <TouchableOpacity style={styles.mainButton} onPress={() => [stopAlarm(), navigation.navigate('Home')]}>
             <Text style={styles.mainButtonText}>{strings.cancel_the_alarm}</Text>
           </TouchableOpacity>
         </View>

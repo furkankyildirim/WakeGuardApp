@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.wake.guard</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>UIUserInterfaceStyle</key>
+    <string>Light</string>
 	<key>CFBundleDisplayName</key>
 	<string>WakeGuard</string>
 	<key>CFBundleExecutable</key>
@@ -25,76 +23,32 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fb</string>
-		<string>fbapi</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-		<string>fb-messenger-api</string>
-		<string>twitter</string>
-		<string>viber</string>
-		<string>whatsapp</string>
-		<string>wechat</string>
-		<string>line</string>
-		<string>instagram</string>
-		<string> instagram-stories</string>
-		<string>kakaotalk</string>
-		<string>mqq</string>
-		<string>vk</string>
-		<string>comgooglemaps</string>
-		<string>googlephotos</string>
-		<string>ha</string>
-		<string>yammer</string>
-	</array>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSContactsUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
+	<string>Deneme 1</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
+	<string>Deneme 2</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background.</string>
+	<string>Deneme 3</string>
 	<key>NSMotionUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>WakeGuard asks your permission to run smoothly</string>
+	<string>App requires motion tracking</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>AntDesign.ttf</string>
-		<string>Entypo.ttf</string>
-		<string>EvilIcons.ttf</string>
-		<string>Feather.ttf</string>
-		<string>FontAwesome.ttf</string>
-		<string>FontAwesome5_Brands.ttf</string>
-		<string>FontAwesome5_Regular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
-		<string>Foundation.ttf</string>
-		<string>Ionicons.ttf</string>
-		<string>MaterialIcons.ttf</string>
-		<string>MaterialCommunityIcons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>Zocial.ttf</string>
-		<string>Fontisto.ttf</string>
+		<string>MaterialIcons.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -110,14 +64,12 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIUserInterfaceStyle</key>
-	<string>Dark</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

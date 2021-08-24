@@ -46,21 +46,24 @@ export default class SearchScreen extends Component {
 
   getPositionCoordinate = async place_id => {
     const position = await axios.get(`${GEOCODING_API}key=${API_KEY}&place_id=${place_id}`)
-    const targetLocation = position.data.results[0].geometry.location
-    console.log(targetLocation.lat, targetLocation.lng)
-    Store._latitude(targetLocation.lat)
-    Store._longitude(targetLocation.lng)
+    const targetLocation = await position.data.results[0].geometry.location;
+    console.log(targetLocation.lat, targetLocation.lng);
+    Store._latitude(targetLocation.lat);
+    Store._longitude(targetLocation.lng);
   }
 
   renderPredictions = ({ item, index }) => {
     return (
-      <TouchableOpacity style={[styles.listItem]} key={item.place_id} onPress={async () => [
-        Store._targetName(item.structured_formatting.main_text), await this.getPositionCoordinate(item.place_id),
-        await Store.mapReferance.animateToRegion({
-          latitude: Store.latitude, longitude: Store.longitude,
-          latitudeDelta: Store.latitudeDelta, longitudeDelta: Store.longitudeDelta
-        }, 100),
-        this.props.navigation.navigate('Home')]}>
+      <TouchableOpacity style={[styles.listItem]} key={item.place_id} onPress={async () => {
+          Store._targetName(item.structured_formatting.main_text);
+          await this.getPositionCoordinate(item.place_id);
+          console.log(Store.latitude,Store.longitude,);
+          await Store.mapReferance.animateToRegion({
+            latitude: Store.latitude, longitude: Store.longitude,
+            latitudeDelta: Store.latitudeDelta, longitudeDelta: Store.longitudeDelta
+          },1),
+          this.props.navigation.navigate('Home')
+      }}>
         <View style={styles.listItemIcon}>
           <Icon name="location-pin" size={RFValue(28)} color="#2284F0" />
         </View>
