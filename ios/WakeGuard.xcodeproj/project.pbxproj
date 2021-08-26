@@ -507,7 +507,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wakeguard.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wake.guard;
 				PRODUCT_NAME = WakeGuard;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -537,7 +537,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wakeguard.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wake.guard;
 				PRODUCT_NAME = WakeGuard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
