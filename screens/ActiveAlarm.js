@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Vibration, Appearance } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Vibration, Appearance,AppRegistry } from 'react-native';
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Store from '../assets/store/Store'
 import { observer } from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import Modal from 'react-native-modal';
 import SoundPlayer from 'react-native-sound-player';
 import { mapStyle } from '../assets/store/MapStyle';
 import { getPreciseDistance } from 'geolib';
+import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import { strings } from '../assets/store/strings'
@@ -19,32 +20,73 @@ const colorScheme = Appearance.getColorScheme();
 
 const { height, width } = Dimensions.get('window');
 
-const ActiveAlarm = observer(({navigation}) => {
+const ActiveAlarm = observer(({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isAlarmStopped, setIsAlarmStopped] = useState(false)
 
   const map = useRef(null);
+  const circle = useRef(null);
 
   useEffect(() => {
-    circle1.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)', strokeWidth: 1.5, radius: Store.radius })
+    if (Platform.OS === "ios") {
+      circle.current.setNativeProps(
+        { 
+          fillColor: "rgba(143,30,19,0.45)", 
+          strokeColor: 'rgb(255,92,78)', 
+          strokeWidth: 1.5, radius: Store.radius 
+        }
+      )
+    } else if (Platform.OS === "android") {
+      PushNotification.createChannel(
+        {
+          channelId: "channel-id",
+          channelName: "My channel",
+          channelDescription: "A channel to categorise your notifications",
+        },
+        (created) => console.log(`createChannel returned '${created}'`)
+      );
+      PushNotification.configure({
+        onNotification: function (notification) {
+          console.log("NOTIFICATION:", notification);
+          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        },
+        popInitialNotification: true,
+        requestPermissions: Platform.OS === 'ios'
+      });
+    }
+
     BackgroundGeolocation.start();
     const interval = setInterval(() => {
       BackgroundGeolocation.getCurrentLocation(position => {
+        console.log(position.latitude,  position.longitude)
         const distance = getPreciseDistance({ latitude: position.latitude, longitude: position.longitude },
           { latitude: Store.latitude, longitude: Store.longitude }, 0.01) - Store.radius;
         console.log(distance)
         Store._remaining(distance)
         if (Store.remaining <= 0 && Store.alarm) {
-          PushNotificationIOS.presentLocalNotification({
-            alertTitle: `${strings.notification_title}`,
-            alertBody: `${strings.notification_info}`,
-            applicationIconBadgeNumber: 0,
-            category: 'SALE_NOTIFICATION',
-            isSilent: false,
-            soundName: 'default',
-          });
-          playSound()
-          Vibration.vibrate([1000], true);
+          if (Platform.OS === "ios") {
+            PushNotificationIOS.presentLocalNotification({
+              alertTitle: `${strings.notification_title}`,
+              alertBody: `${strings.notification_info}`,
+              applicationIconBadgeNumber: 0,
+              category: 'SALE_NOTIFICATION',
+              isSilent: false,
+              soundName: 'default',
+            });
+            playSound();
+            Vibration.vibrate([1000], true);
+          } else if (Platform.OS === "android") {
+            PushNotification.localNotification({
+              channelId: "channel-id",
+              title: `${strings.notification_title}`,
+              message: `${strings.notification_info}`,
+              largeIcon: "assets/images/appIcon.png",
+              bigLargeIcon: "assets/images/appIcon.png",
+              smallIcon: "appIcon"
+            })
+            playSound()
+            Vibration.vibrate([1000, 1000], true);
+          }
           setIsModalVisible(true)
           BackgroundGeolocation.stop()
           clearInterval(interval)
@@ -98,12 +140,19 @@ const ActiveAlarm = observer(({navigation}) => {
     }, 100)
   }
 
-  function getCurrentPosition() {
+  getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition((position => resolve(position)), reject,
-        { enableHighAccuracy: true, timeout: 1000, maximumAge: 1000, })
-    })
-  }
+      Geolocation.getCurrentPosition((position) => resolve(position), (error => {
+        getCurrentPosition();
+        reject(error);
+      }), 
+      {
+        timeout: 10000,
+        maximumAge: 1000,
+        enableHighAccuracy: true,
+      });
+    });
+  };
 
   checkRemaining = async () => {
     const { coords } = await getCurrentPosition()
@@ -125,7 +174,7 @@ const ActiveAlarm = observer(({navigation}) => {
             <Icon name="close" size={RFValue(112.5)} color="#fff" />
           </TouchableOpacity>
           <View style={[styles.buttonCon, { display: isAlarmStopped === false ? "none" : "flex" }]}>
-            <TouchableOpacity style={styles.addToFavsButton} onPress={() => [this.addFavorite(), this.closeModal()]}>
+            <TouchableOpacity style={styles.addToFavsButton} onPress={() => [addFavorite(), closeModal()]}>
               <Text style={styles.modalCancelButtonText}>{strings.add_to_favorites}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalCancelButton} onPress={() => this.closeModal()}>
@@ -154,8 +203,19 @@ const ActiveAlarm = observer(({navigation}) => {
         >
           <Marker coordinate={{ latitude: Store.latitude, longitude: Store.longitude, }}
             pinColor='rgb(255,92,78)' key={0} />
-          <Circle ref={ref => (this.circle1 = ref)} radius={Store.radius}
-            center={{ latitude: Store.latitude, longitude: Store.longitude }} />
+              <Circle
+                ref={circle}
+                center={{ latitude: Store.latitude, longitude: Store.longitude }}
+                strokeWidth={1}
+                zIndex={1}
+                radius={Store.radius}
+                {...Platform.OS === "android" ?
+                  {
+                    fillColor: "rgba(143,30,19,0.45)",
+                    strokeColor: 'rgb(255,92,78)'
+                  } : null}
+                onPress={() => (pin ? console.log(true) : console.log(false))}
+              />
         </MapView>
         <View style={styles.topComponent}>
 
@@ -310,8 +370,8 @@ const styles =
         justifyContent: 'space-evenly',
         alignItems: "center",
         borderWidth: 2,
-          borderColor: 'rgba(100,100,100,0.45)',
-          borderRadius: 8,
+        borderColor: 'rgba(100,100,100,0.45)',
+        borderRadius: 8,
       },
       remainingDistanceContainer: {
         flex: 1,
@@ -320,8 +380,8 @@ const styles =
         justifyContent: 'space-evenly',
         alignItems: "center",
         borderWidth: 2,
-          borderColor: 'rgba(100,100,100,0.45)',
-          borderRadius: 8,
+        borderColor: 'rgba(100,100,100,0.45)',
+        borderRadius: 8,
       },
       alarmSettings: {
         display: "flex",
@@ -428,7 +488,7 @@ const styles =
         alignItems: "center",
         marginVertical: width * 0.0275,
       }
-      })
+    })
     : StyleSheet.create({
       mainContainer: {
         flex: 1,
@@ -653,4 +713,4 @@ const styles =
         alignItems: "center",
         marginVertical: width * 0.0275,
       }
-      });
+    });

@@ -75,7 +75,8 @@ const FavoriteAlarms = observer(({navigation}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.menuButton}>
-          <Icon name="arrow-left" size={RFValue(18)} color="#000" />
+          <Icon name="arrow-left" size={RFValue(18)} color=
+            {colorScheme === "dark" ? "#FFFFFF": "#000000"}/>
         </TouchableOpacity>
         <View>
           <Text style={styles.title}>{strings.favorite_alarms}</Text>

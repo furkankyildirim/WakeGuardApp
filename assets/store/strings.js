@@ -50,6 +50,8 @@ export const strings = new LocalizedStrings({
     package_expired: 'Your package has expired.',
     restore_purchase: 'Restore Purchase',
     close: 'Close',
+    warning: "Attention",
+    net_msg: "An internet connection is required to use the application. Please close the application and try again."
   },
   'tr': {
     search_screen: "Arama Sayfası",
@@ -99,7 +101,9 @@ export const strings = new LocalizedStrings({
     restore_failed: 'Satın alma işlemi geri yüklenemedi.',
     package_expired: 'Paketinizin süresi doldu.',
     restore_purchase: 'Satın Alınanları Geri Yükle',
-    close: 'Kapat'
+    close: 'Kapat',
+    warning: "Uyarı",
+    net_msg: "Uygulamayı kullanmak için internet bağlantısı gereklidir. Lütfen uygulamayı kapatın ve tekrar deneyin."
   },
   'de': {
     search_screen: "Suchbildschirm",
@@ -150,6 +154,8 @@ export const strings = new LocalizedStrings({
     package_expired: 'Ihr Paket ist abgelaufen.',
     restore_purchase: 'Kauf wiederherstellen',
     close: 'Schließen',
+    warning: "Warnung",
+    net_msg: "Zur Nutzung der Anwendung ist eine Internetverbindung erforderlich. Bitte schließen Sie die Anwendung und versuchen Sie es erneut."
   },
   'fr': {
     search_screen: "Ecran de recherche",
@@ -200,6 +206,9 @@ export const strings = new LocalizedStrings({
     package_expired: 'Votre package a expiré.',
     restore_purchase: "Restaurer l'achat",
     close: 'Fermer',
+    warning: "Attention",
+    net_msg: "Une connexion Internet est nécessaire pour utiliser l'application. Veuillez fermer l'application et réessayer."
+    
   },
   'es': {
     search_screen: "Pantalla de busqueda",
@@ -250,6 +259,8 @@ export const strings = new LocalizedStrings({
     package_expired: 'Su paquete ha expirado.',
     restore_purchase: 'Restaurar compra',
     close: 'Cerca',
+    warning: "Atención",
+    net_msg: "Se requiere una conexión a Internet para utilizar la aplicación. Cierre la aplicación y vuelva a intentarlo."
   },
   'it': {
     search_screen: "Schermata di ricerca",
@@ -300,5 +311,7 @@ export const strings = new LocalizedStrings({
     package_expired: "Il tuo pacchetto è scaduto.",
     restore_purchase: "Restore Purchase",
     close: "Chiudi",
+    warning: "Attenzione",
+    net_msg: "Per utilizzare l'applicazione è necessaria una connessione a Internet. Chiudi l'applicazione e riprova."
   },
 });

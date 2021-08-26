@@ -1,43 +1,30 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-  Dimensions,
-  TouchableOpacity,
-  Alert,
-  Platform,
-  Appearance,
-} from 'react-native';
-import MapView, {Marker, Circle, PROVIDER_GOOGLE} from 'react-native-maps';
+import React, { useState, useEffect, useRef } from 'react';
+import {View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Alert, Platform, Appearance,PermissionsAndroid} from 'react-native';
+import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import Geolocation from '@react-native-community/geolocation';
-import {observer} from 'mobx-react';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { check, request, PERMISSIONS, RESULTS, openSettings} from 'react-native-permissions';
+import Geolocation from 'react-native-geolocation-service';
+import { observer } from 'mobx-react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {API_KEY, GEOCODING_API} from '../assets/store/GoogleAPI';
-import {mapStyle} from '../assets/store/MapStyle';
-import {strings} from '../assets/store/strings';
+import NetInfo from "@react-native-community/netinfo";
+import { API_KEY, GEOCODING_API } from '../assets/store/GoogleAPI';
+import { mapStyle } from '../assets/store/MapStyle';
+import { strings } from '../assets/store/strings';
 import Store from '../assets/store/Store';
+import Splash from './SplashScreen';
 
 const colorScheme = Appearance.getColorScheme();
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
-const Home = observer(({navigation}) => {
+const Home = observer(({ navigation }) => {
   const [active, setActive] = useState('#2284F0');
-  const [passive, setPassive] = useState(
-    colorScheme === 'light' ? '#f2f2f2' : 'rgba(100,100,100,0.1125)',
-  );
   const [activeText, setActiveText] = useState('#FFFFFF');
-  const [passiveText, setPassiveText] = useState(
-    colorScheme === 'light' ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.725)',
-  );
+  const [passive, setPassive] = useState(colorScheme === 'light' ? '#f2f2f2' : 'rgba(100,100,100,0.1125)',);
+  const [passiveText, setPassiveText] = useState(colorScheme === 'light' ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.725)');
   const [radius, setRadius] = useState(50);
   const [region, setRegion] = useState({});
   const [pin, setPin] = useState(true);
@@ -46,13 +33,22 @@ const Home = observer(({navigation}) => {
   const map = useRef(null);
   const circle = useRef(null);
 
-  useEffect(async () => {
-    Store._mapReferance(map.current);
-    if (Platform.OS === 'ios') {
-      PushNotificationIOS.requestPermissions();
-    }
-    await checkPermissions();
-    await getData();
+  useEffect(() => {
+    NetInfo.fetch().then(async state => {
+      if (state.isConnected){
+        Store._mapReferance(map.current);
+        if (Platform.OS === 'ios') {
+          PushNotificationIOS.requestPermissions();
+        }
+        await checkPermissions();
+        await getData();
+      } else{
+        Alert.alert(
+          `${strings.warning}`,
+          `${strings.net_msg}`,
+        )
+      }
+    })
   }, []);
 
   getData = async () => {
@@ -80,36 +76,53 @@ const Home = observer(({navigation}) => {
     Store._mapReferance(map.current);
   };
 
-  checkPermissions = async () => {
-    const permission =
-      Platform.OS === 'ios'
-        ? PERMISSIONS.IOS.LOCATION_ALWAYS
-        : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION;
+  AlertMessage = (permission) => {
+    return Alert.alert(
+      `${strings.no_access_location_title}`,
+      `${strings.no_access_location_info}`,
+      [
+        {
+          text: `${strings.settings}`,
+          style: 'default',
+          onPress: async () => {
+            await openSettings();
+            const lastCheck = await check(permission);
+            lastCheck === 'authorized' ? setFirstConfigure() : null;
+          },
+        },
+      ],
+    );
+  }
 
-    const checkPermission = await check(permission);
-    if (checkPermission === RESULTS.GRANTED) {
-      setFirstConfigure();
-    } else {
-      const requestPermission = await request(permission);
-      console.log(requestPermission);
-      if (requestPermission === RESULTS.GRANTED) {
+  checkPermissions = async () => {
+    if (Platform.OS === "ios"){
+      const permission = PERMISSIONS.IOS.LOCATION_ALWAYS;
+      const checkPermission = await check(permission);
+
+      if(checkPermission === RESULTS.GRANTED){
         setFirstConfigure();
-      } else {
-        Alert.alert(
-          `${strings.no_access_location_title}`,
-          `${strings.no_access_location_info}`,
-          [
-            {
-              text: `${strings.settings}`,
-              style: 'default',
-              onPress: async () => {
-                await Permissions.openSettings();
-                const lastCheck = await check(permission);
-                lastCheck === 'authorized' ? setFirstConfigure() : null;
-              },
-            },
-          ],
-        );
+      }
+      else {
+        const requestPermission = await request(permission);
+        requestPermission === RESULTS.GRANTED ? setFirstConfigure() : AlertMessage(permission);
+      }
+    }
+
+    else if(Platform.OS === "android"){
+      const bgPermission = PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION;
+      const fgPermission = PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION;
+
+      if(await PermissionsAndroid.check(fgPermission)){
+        setFirstConfigure();
+      }
+
+      else {
+        if(await PermissionsAndroid.request(fgPermission)){
+          await request(bgPermission);
+          setFirstConfigure();
+        } else {
+          AlertMessage(fgPermission);
+        } 
       }
     }
   };
@@ -123,12 +136,12 @@ const Home = observer(({navigation}) => {
         style={[
           styles.radiusOption,
           sty,
-          {backgroundColor: radius === rds ? active : passive},
+          { backgroundColor: radius === rds ? active : passive },
         ]}>
         <Text
           style={[
             styles.radiusOptionText,
-            {color: radius === rds ? activeText : passiveText},
+            { color: radius === rds ? activeText : passiveText },
           ]}>
           {rds}
         </Text>
@@ -137,7 +150,7 @@ const Home = observer(({navigation}) => {
   };
 
   setFirstConfigure = async () => {
-    const {coords} = await getCurrentPosition();
+    const { coords } = await getCurrentPosition();
     setRegion({
       latitude: coords.latitude,
       longitude: coords.longitude,
@@ -150,16 +163,15 @@ const Home = observer(({navigation}) => {
     Store._longitudeDelta(0.0075);
     setTimeout(() => {
       setMapVisibility(true);
-      circle.current.setNativeProps({
-        fillColor: 'rgba(143,30,19,0.45)',
-        strokeColor: 'rgb(255,92,78)',
-      });
+      if (Platform.OS === "ios" && circle.current !== null) {
+        circle.current.setNativeProps({ fillColor: "rgba(143,30,19,0.45)", strokeColor: 'rgb(255,92,78)' });
+      }
       Store._mapReferance(map.current);
     }, 1);
   };
 
   goUserLocation = async () => {
-    const {coords} = await getCurrentPosition();
+    const { coords } = await getCurrentPosition();
     Store._longitude(coords.longitude);
     Store._latitude(coords.latitude);
     Store._latitudeDelta(0.0075);
@@ -178,17 +190,27 @@ const Home = observer(({navigation}) => {
 
   getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition((position) => resolve(position), reject, {
-        enableHighAccuracy: true,
-        timeout: 1000,
+      Geolocation.getCurrentPosition((position) => resolve(position), (error => {
+        getCurrentPosition();
+        reject(error);
+      }), 
+      {
+        showLocationDialog:true,
+        timeout: 10000,
         maximumAge: 1000,
+        enableHighAccuracy: true,
       });
     });
   };
+  
   getPositionInfo = async () => {
     const info =
       await axios.get(`${GEOCODING_API}key=${API_KEY}&latlng=${Store.latitude},${Store.longitude}
-    &location_type=ROOFTOP&result_type=street_address`);
+    &location_type=ROOFTOP&result_type=street_address`).catch(error => {
+      if(error) {
+        console.log(error.message)
+      }
+    });
     if (info.data.status === 'OK') {
       Store._targetName(info.data.results[0].formatted_address);
     } else {
@@ -245,12 +267,12 @@ const Home = observer(({navigation}) => {
         style={[
           styles.radiusOption,
           sty,
-          {backgroundColor: radius === rds ? active : passive},
+          { backgroundColor: radius === rds ? active : passive },
         ]}>
         <Text
           style={[
             styles.radiusOptionText,
-            {color: radius === rds ? activeText : passiveText},
+            { color: radius === rds ? activeText : passiveText },
           ]}>
           {rds}
         </Text>
@@ -285,7 +307,7 @@ const Home = observer(({navigation}) => {
               <Marker
                 coordinate={
                   pin
-                    ? {latitude: Store.latitude, longitude: Store.longitude}
+                    ? { latitude: Store.latitude, longitude: Store.longitude }
                     : null
                 }
                 pinColor="rgb(255,92,78)"
@@ -293,10 +315,15 @@ const Home = observer(({navigation}) => {
               />
               <Circle
                 ref={circle}
-                center={{latitude: Store.latitude, longitude: Store.longitude}}
+                center={{ latitude: Store.latitude, longitude: Store.longitude }}
                 strokeWidth={1}
                 zIndex={1}
                 radius={radius}
+                {...Platform.OS === "android" ?
+                  {
+                    fillColor: "rgba(143,30,19,0.45)",
+                    strokeColor: 'rgb(255,92,78)'
+                  } : null}
                 onPress={() => (pin ? console.log(true) : console.log(false))}
               />
             </MapView>
@@ -305,7 +332,7 @@ const Home = observer(({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.myLocation,
-                  {right: 2 * (width * 0.115 + width * 0.0275)},
+                  { right: 2 * (width * 0.115 + width * 0.0275) },
                 ]}
                 onPress={() => navigation.navigate('FavoriteAlarms')}>
                 <Icon name="star" size={RFValue(24)} color={colorScheme === "light" ? "#000" : "#fff"} />
@@ -313,13 +340,13 @@ const Home = observer(({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.myLocation,
-                  {right: width * 0.115 + width * 0.0275},
+                  { right: width * 0.115 + width * 0.0275 },
                 ]}
                 onPress={() => navigation.navigate('RecentAlarms')}>
                 <Icon name="clock" size={RFValue(24)} color={colorScheme === "light" ? "#000" : "#fff"} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.myLocation, {right: 0}]}
+                style={[styles.myLocation, { right: 0 }]}
                 onPress={async () => await goUserLocation()}>
                 <Icon name="cursor" size={RFValue(24)} color="#2284F0" />
               </TouchableOpacity>
@@ -368,11 +395,8 @@ const Home = observer(({navigation}) => {
             </View>
           </SafeAreaView>
         </View>
-      ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="small" />
-        </View>
-      )}
+      ) :<Splash/>
+      }
     </View>
   );
 });
@@ -382,467 +406,467 @@ export default Home;
 const styles =
   colorScheme === 'dark'
     ? StyleSheet.create({
-        mainContainer: {
-          flex: 1,
-        },
-        map: {
-          width: width,
-          height: height,
-          position: 'absolute',
-          top: 0,
-        },
-        componentContainer: {
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          bottom: 0,
-          width: width,
-          height: height,
-        },
-        topComponent: {
-          width: width,
-          height: width * 0.115,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: width * 0.02,
-        },
-        mainComponent: {
-          width: width,
-          height: width * 0.65 + width * 0.0275,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        },
-        menuButton: {
-          height: width * 0.115,
-          width: width * 0.115,
-          backgroundColor: 'rgba(10,10,10,0.6)',
-          borderRadius: 8,
-          marginLeft: width * 0.0275,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        readyTokensContainer: {
-          height: width * 0.115,
-          minWidth: width * 0.115,
-          paddingHorizontal: 7.5,
-          marginRight: width * 0.0275,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: '#2284F0',
-          borderRadius: 8,
-          justifyContent: 'center',
-        },
-        myLocation: {
-          height: width * 0.115,
-          minWidth: width * 0.115,
-          marginRight: width * 0.0275,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: 'rgba(10,10,10,0.6)',
-          borderRadius: 8,
-          justifyContent: 'center',
-          position: 'absolute',
-          bottom: width * 0.65 + width * 0.0275 + width * 0.0275,
-          borderWidth: 2,
-          borderColor: 'rgba(100,100,100,0.45)',
-        },
-        readyTokenCount: {
-          color: '#fff',
-          fontSize: RFValue(24),
-        },
-        mainButton: {
-          width: width - width * 0.0275 * 2,
-          height: width * 0.115,
-          backgroundColor: '#2284F0',
-          borderRadius: 8,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: width * 0.0275,
-        },
-        mainButtonText: {
-          color: '#fff',
-          fontSize: RFValue(18),
-        },
-        alarmSettings: {
-          width: width - width * 0.0275 * 2,
-          height:
-            width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275),
-        },
-        chooseDestinationContainer: {
-          width: '100%',
-          height:
-            (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
-            0.5,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-          backgroundColor: 'rgba(10,10,10,0.6)',
-          borderRadius: 8,
-          borderWidth: 2,
-          borderColor: 'rgba(100,100,100,0.45)',
-        },
-        setRadiusContainer: {
-          width: '100%',
-          height:
-            (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
-            0.5,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-          backgroundColor: 'rgba(10,10,10,0.6)',
-          borderRadius: 8,
-          marginTop: width * 0.0275,
-          borderWidth: 2,
-          borderColor: 'rgba(100,100,100,0.45)',
-        },
-        locationInput: {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
-          marginLeft: width * 0.0275,
-          backgroundColor: 'rgba(100,100,100,0.225)',
-          height: width * 0.0875,
-          borderRadius: 8,
-        },
-        radiusInput: {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
-          marginLeft: width * 0.0275,
-          height: width * 0.0875,
-          borderRadius: 8,
-          backgroundColor: 'rgba(100,100,100,0.1125)',
-        },
-        radiusOptionText: {
-          fontSize: RFValue(14),
-        },
-        mainComponentTitle: {
-          fontSize: RFValue(16),
-          marginLeft: (width * 0.0275 * 3) / 2,
-          color: 'rgba(255,255,255,0.825)',
-        },
-        adress: {
-          fontSize: RFValue(14),
-          width: width * 0.75,
-          color: 'rgba(255,255,255,0.725)',
-        },
-        radiusOption: {
-          flex: 1,
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        modal: {
-          backgroundColor: '#fff',
-          height: width * 0.3 * 3 + width * 0.115 + width * 0.0275 * 5,
-          borderRadius: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        },
-        modalCancelButton: {
-          width: '93.5%',
-          height: width * 0.115,
-          backgroundColor: 'rgb(255,92,78)',
-          borderRadius: 8,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginVertical: width * 0.0275,
-        },
-        modalCancelButtonText: {
-          color: '#fff',
-          fontSize: RFValue(18),
-        },
-        paymentMethodCard: {
-          width: '93.5%',
-          height: width * 0.3,
-          borderRadius: 8,
-          marginTop: width * 0.0275,
-        },
-        deneme: {
-          width: '100%',
-          height: width * 0.3,
-          borderRadius: 8,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        },
-        pmcTextContainer: {
-          height: width * 0.185,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        },
-        paymentMethodTitle: {
-          color: '#fff',
-          fontSize: RFValue(20),
-          marginLeft: width * 0.0275,
-          fontWeight: '500',
-        },
-        paymentMethodInfo: {
-          width: width * 0.5,
-          color: '#fff',
-          fontSize: RFValue(13),
-          marginLeft: width * 0.0275,
-        },
-        fee: {
-          color: '#fff',
-          fontSize: RFValue(18),
-          marginRight: width * 0.0275,
-          borderWidth: 1.5,
-          paddingVertical: 3,
-          paddingHorizontal: 5,
-          borderColor: 'rgba(255,255,255,0.5)',
-          borderRadius: 8,
-        },
-      })
+      mainContainer: {
+        flex: 1,
+      },
+      map: {
+        width: width,
+        height: height,
+        position: 'absolute',
+        top: 0,
+      },
+      componentContainer: {
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        bottom: 0,
+        width: width,
+        height: height,
+      },
+      topComponent: {
+        width: width,
+        height: width * 0.115,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: width * 0.02,
+      },
+      mainComponent: {
+        width: width,
+        height: width * 0.65 + width * 0.0275,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      },
+      menuButton: {
+        height: width * 0.115,
+        width: width * 0.115,
+        backgroundColor: 'rgba(10,10,10,0.6)',
+        borderRadius: 8,
+        marginLeft: width * 0.0275,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      readyTokensContainer: {
+        height: width * 0.115,
+        minWidth: width * 0.115,
+        paddingHorizontal: 7.5,
+        marginRight: width * 0.0275,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#2284F0',
+        borderRadius: 8,
+        justifyContent: 'center',
+      },
+      myLocation: {
+        height: width * 0.115,
+        minWidth: width * 0.115,
+        marginRight: width * 0.0275,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(10,10,10,0.6)',
+        borderRadius: 8,
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: width * 0.65 + width * 0.0275 + width * 0.0275,
+        borderWidth: 2,
+        borderColor: 'rgba(100,100,100,0.45)',
+      },
+      readyTokenCount: {
+        color: '#fff',
+        fontSize: RFValue(24),
+      },
+      mainButton: {
+        width: width - width * 0.0275 * 2,
+        height: width * 0.115,
+        backgroundColor: '#2284F0',
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: width * 0.0275,
+      },
+      mainButtonText: {
+        color: '#fff',
+        fontSize: RFValue(18),
+      },
+      alarmSettings: {
+        width: width - width * 0.0275 * 2,
+        height:
+          width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275),
+      },
+      chooseDestinationContainer: {
+        width: '100%',
+        height:
+          (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
+          0.5,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        backgroundColor: 'rgba(10,10,10,0.6)',
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: 'rgba(100,100,100,0.45)',
+      },
+      setRadiusContainer: {
+        width: '100%',
+        height:
+          (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
+          0.5,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        backgroundColor: 'rgba(10,10,10,0.6)',
+        borderRadius: 8,
+        marginTop: width * 0.0275,
+        borderWidth: 2,
+        borderColor: 'rgba(100,100,100,0.45)',
+      },
+      locationInput: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
+        marginLeft: width * 0.0275,
+        backgroundColor: 'rgba(100,100,100,0.225)',
+        height: width * 0.0875,
+        borderRadius: 8,
+      },
+      radiusInput: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
+        marginLeft: width * 0.0275,
+        height: width * 0.0875,
+        borderRadius: 8,
+        backgroundColor: 'rgba(100,100,100,0.1125)',
+      },
+      radiusOptionText: {
+        fontSize: RFValue(14),
+      },
+      mainComponentTitle: {
+        fontSize: RFValue(16),
+        marginLeft: (width * 0.0275 * 3) / 2,
+        color: 'rgba(255,255,255,0.825)',
+      },
+      adress: {
+        fontSize: RFValue(14),
+        width: width * 0.75,
+        color: 'rgba(255,255,255,0.725)',
+      },
+      radiusOption: {
+        flex: 1,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      modal: {
+        backgroundColor: '#fff',
+        height: width * 0.3 * 3 + width * 0.115 + width * 0.0275 * 5,
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      modalCancelButton: {
+        width: '93.5%',
+        height: width * 0.115,
+        backgroundColor: 'rgb(255,92,78)',
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: width * 0.0275,
+      },
+      modalCancelButtonText: {
+        color: '#fff',
+        fontSize: RFValue(18),
+      },
+      paymentMethodCard: {
+        width: '93.5%',
+        height: width * 0.3,
+        borderRadius: 8,
+        marginTop: width * 0.0275,
+      },
+      deneme: {
+        width: '100%',
+        height: width * 0.3,
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      pmcTextContainer: {
+        height: width * 0.185,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      paymentMethodTitle: {
+        color: '#fff',
+        fontSize: RFValue(20),
+        marginLeft: width * 0.0275,
+        fontWeight: '500',
+      },
+      paymentMethodInfo: {
+        width: width * 0.5,
+        color: '#fff',
+        fontSize: RFValue(13),
+        marginLeft: width * 0.0275,
+      },
+      fee: {
+        color: '#fff',
+        fontSize: RFValue(18),
+        marginRight: width * 0.0275,
+        borderWidth: 1.5,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        borderColor: 'rgba(255,255,255,0.5)',
+        borderRadius: 8,
+      },
+    })
     : StyleSheet.create({
-        mainContainer: {
-          flex: 1,
-        },
-        map: {
-          width: width,
-          height: height,
-          position: 'absolute',
-          top: 0,
-        },
-        componentContainer: {
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          bottom: 0,
-          width: width,
-          height: height,
-        },
-        topComponent: {
-          width: width,
-          height: width * 0.115,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: width * 0.02,
-        },
-        mainComponent: {
-          width: width,
-          height: width * 0.65 + width * 0.0275,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        },
-        menuButton: {
-          height: width * 0.115,
-          width: width * 0.115,
-          backgroundColor: 'rgba(10,10,10,0.6)',
-          borderRadius: 8,
-          marginLeft: width * 0.0275,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        readyTokensContainer: {
-          height: width * 0.115,
-          minWidth: width * 0.115,
-          paddingHorizontal: 7.5,
-          marginRight: width * 0.0275,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: '#2284F0',
-          borderRadius: 8,
-          justifyContent: 'center',
-        },
-        myLocation: {
-          height: width * 0.115,
-          minWidth: width * 0.115,
-          marginRight: width * 0.0275,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: '#fff',
-          borderRadius: 8,
-          justifyContent: 'center',
-          position: 'absolute',
-          bottom: width * 0.65 + width * 0.0275 + width * 0.0275,
-          borderWidth: 2,
-          borderColor: '#ddd',
-        },
-        readyTokenCount: {
-          color: '#fff',
-          fontSize: RFValue(24),
-        },
-        mainButton: {
-          width: width - width * 0.0275 * 2,
-          height: width * 0.115,
-          backgroundColor: '#2284F0',
-          borderRadius: 8,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: width * 0.0275,
-        },
-        mainButtonText: {
-          color: '#fff',
-          fontSize: RFValue(18),
-        },
-        alarmSettings: {
-          width: width - width * 0.0275 * 2,
-          height:
-            width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275),
-        },
-        chooseDestinationContainer: {
-          width: '100%',
-          height:
-            (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
-            0.5,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-          backgroundColor: '#fff',
-          borderRadius: 8,
-          borderWidth: 2,
-          borderColor: '#ddd',
-        },
-        setRadiusContainer: {
-          width: '100%',
-          height:
-            (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
-            0.5,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-          backgroundColor: '#fff',
-          borderRadius: 8,
-          marginTop: width * 0.0275,
-          borderWidth: 2,
-          borderColor: '#ddd',
-        },
-        locationInput: {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
-          marginLeft: width * 0.0275,
-          backgroundColor: '#f2f2f2',
-          height: width * 0.0875,
-          borderRadius: 8,
-        },
-        radiusInput: {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
-          marginLeft: width * 0.0275,
-          height: width * 0.0875,
-          borderRadius: 8,
-          backgroundColor: '#f2f2f2',
-        },
-        radiusOptionText: {
-          fontSize: RFValue(14),
-          color: 'rgba(0,0,0,0.4)',
-        },
-        mainComponentTitle: {
-          fontSize: RFValue(16),
-          marginLeft: (width * 0.0275 * 3) / 2,
-          color: '#000',
-        },
-        adress: {
-          fontSize: RFValue(14),
-          width: width * 0.75,
-          color: 'rgba(0,0,0,0.4)',
-        },
-        radiusOption: {
-          flex: 1,
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        modal: {
-          backgroundColor: '#fff',
-          height: width * 0.3 * 3 + width * 0.115 + width * 0.0275 * 5,
-          borderRadius: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        },
-        modalCancelButton: {
-          width: '93.5%',
-          height: width * 0.115,
-          backgroundColor: 'rgb(255,92,78)',
-          borderRadius: 8,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginVertical: width * 0.0275,
-        },
-        modalCancelButtonText: {
-          color: '#fff',
-          fontSize: RFValue(18),
-        },
-        paymentMethodCard: {
-          width: '93.5%',
-          height: width * 0.3,
-          borderRadius: 8,
-          marginTop: width * 0.0275,
-        },
-        deneme: {
-          width: '100%',
-          height: width * 0.3,
-          borderRadius: 8,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        },
-        pmcTextContainer: {
-          height: width * 0.185,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        },
-        paymentMethodTitle: {
-          color: '#fff',
-          fontSize: RFValue(20),
-          marginLeft: width * 0.0275,
-          fontWeight: '500',
-        },
-        paymentMethodInfo: {
-          width: width * 0.5,
-          color: '#fff',
-          fontSize: RFValue(13),
-          marginLeft: width * 0.0275,
-        },
-        fee: {
-          color: '#fff',
-          fontSize: RFValue(18),
-          marginRight: width * 0.0275,
-          borderWidth: 1.5,
-          paddingVertical: 3,
-          paddingHorizontal: 5,
-          borderColor: 'rgba(255,255,255,0.5)',
-          borderRadius: 8,
-        },
-      });
+      mainContainer: {
+        flex: 1,
+      },
+      map: {
+        width: width,
+        height: height,
+        position: 'absolute',
+        top: 0,
+      },
+      componentContainer: {
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        bottom: 0,
+        width: width,
+        height: height,
+      },
+      topComponent: {
+        width: width,
+        height: width * 0.115,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: width * 0.02,
+      },
+      mainComponent: {
+        width: width,
+        height: width * 0.65 + width * 0.0275,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      },
+      menuButton: {
+        height: width * 0.115,
+        width: width * 0.115,
+        backgroundColor: 'rgba(10,10,10,0.6)',
+        borderRadius: 8,
+        marginLeft: width * 0.0275,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      readyTokensContainer: {
+        height: width * 0.115,
+        minWidth: width * 0.115,
+        paddingHorizontal: 7.5,
+        marginRight: width * 0.0275,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#2284F0',
+        borderRadius: 8,
+        justifyContent: 'center',
+      },
+      myLocation: {
+        height: width * 0.115,
+        minWidth: width * 0.115,
+        marginRight: width * 0.0275,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: width * 0.65 + width * 0.0275 + width * 0.0275,
+        borderWidth: 2,
+        borderColor: '#ddd',
+      },
+      readyTokenCount: {
+        color: '#fff',
+        fontSize: RFValue(24),
+      },
+      mainButton: {
+        width: width - width * 0.0275 * 2,
+        height: width * 0.115,
+        backgroundColor: '#2284F0',
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: width * 0.0275,
+      },
+      mainButtonText: {
+        color: '#fff',
+        fontSize: RFValue(18),
+      },
+      alarmSettings: {
+        width: width - width * 0.0275 * 2,
+        height:
+          width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275),
+      },
+      chooseDestinationContainer: {
+        width: '100%',
+        height:
+          (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
+          0.5,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: '#ddd',
+      },
+      setRadiusContainer: {
+        width: '100%',
+        height:
+          (width * 0.65 - (width * 0.115 + width * 0.0275 + width * 0.0275)) *
+          0.5,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginTop: width * 0.0275,
+        borderWidth: 2,
+        borderColor: '#ddd',
+      },
+      locationInput: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
+        marginLeft: width * 0.0275,
+        backgroundColor: '#f2f2f2',
+        height: width * 0.0875,
+        borderRadius: 8,
+      },
+      radiusInput: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: width - width * 0.0275 * 2 - width * 0.0275 * 2,
+        marginLeft: width * 0.0275,
+        height: width * 0.0875,
+        borderRadius: 8,
+        backgroundColor: '#f2f2f2',
+      },
+      radiusOptionText: {
+        fontSize: RFValue(14),
+        color: 'rgba(0,0,0,0.4)',
+      },
+      mainComponentTitle: {
+        fontSize: RFValue(16),
+        marginLeft: (width * 0.0275 * 3) / 2,
+        color: '#000',
+      },
+      adress: {
+        fontSize: RFValue(14),
+        width: width * 0.75,
+        color: 'rgba(0,0,0,0.4)',
+      },
+      radiusOption: {
+        flex: 1,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      modal: {
+        backgroundColor: '#fff',
+        height: width * 0.3 * 3 + width * 0.115 + width * 0.0275 * 5,
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      modalCancelButton: {
+        width: '93.5%',
+        height: width * 0.115,
+        backgroundColor: 'rgb(255,92,78)',
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: width * 0.0275,
+      },
+      modalCancelButtonText: {
+        color: '#fff',
+        fontSize: RFValue(18),
+      },
+      paymentMethodCard: {
+        width: '93.5%',
+        height: width * 0.3,
+        borderRadius: 8,
+        marginTop: width * 0.0275,
+      },
+      deneme: {
+        width: '100%',
+        height: width * 0.3,
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      pmcTextContainer: {
+        height: width * 0.185,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      paymentMethodTitle: {
+        color: '#fff',
+        fontSize: RFValue(20),
+        marginLeft: width * 0.0275,
+        fontWeight: '500',
+      },
+      paymentMethodInfo: {
+        width: width * 0.5,
+        color: '#fff',
+        fontSize: RFValue(13),
+        marginLeft: width * 0.0275,
+      },
+      fee: {
+        color: '#fff',
+        fontSize: RFValue(18),
+        marginRight: width * 0.0275,
+        borderWidth: 1.5,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        borderColor: 'rgba(255,255,255,0.5)',
+        borderRadius: 8,
+      },
+    });

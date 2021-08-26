@@ -27,7 +27,7 @@ const App = () => {
         <Main.Screen
           name="SearchScreen"
           component={SearchScreen}
-          options={{ gestureEnabled: false, headerShown: false, }} />
+          options={{ gestureEnabled: true, headerShown: false, }} />
         <Main.Screen
           name="ActiveAlarm"
           component={ActiveAlarm}
@@ -35,11 +35,11 @@ const App = () => {
         <Main.Screen
           name="RecentAlarms"
           component={RecentAlarms}
-          options={{ gestureEnabled: false, headerShown: false, }} />
+          options={{ gestureEnabled: true, headerShown: false, }} />
         <Main.Screen
           name="FavoriteAlarms"
           component={FavoriteAlarms}
-          options={{ gestureEnabled: false, headerShown: false, }} />
+          options={{ gestureEnabled: true, headerShown: false, }} />
       </Main.Navigator>
     </NavigationContainer>
   )

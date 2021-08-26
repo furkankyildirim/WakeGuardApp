@@ -56,7 +56,7 @@ export default class SearchScreen extends Component {
     if (value !== '') {
       const places =
         await axios.get(`${AUTOCOMPLETE_API}key=${API_KEY}&input=${value}
-      &location=${Store.latitude},${Store.longitude}&radius=10000&components=country:tr`);
+      &location=${Store.latitude},${Store.longitude}&radius=10000`);
       this.setState({predictions: places.data.predictions});
     } else {
       this.setState({predictions: ''});
@@ -76,7 +76,7 @@ export default class SearchScreen extends Component {
   renderPredictions = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={[styles.listItem]}
+        style={styles.listItem}
         key={item.place_id}
         onPress={async () => {
           Store._targetName(item.structured_formatting.main_text);
@@ -115,7 +115,8 @@ export default class SearchScreen extends Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Home')}
             style={styles.menuButton}>
-            <Icon name="arrow-left" size={RFValue(18)} color="#000" />
+            <Icon name="arrow-left" size={RFValue(18)} color=
+            {colorScheme === "dark" ? "#FFFFFF": "#000000"} />
           </TouchableOpacity>
           <View style={styles.alarmSettings}>
             <View style={styles.chooseDestinationContainer}>

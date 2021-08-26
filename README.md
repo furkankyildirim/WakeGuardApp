@@ -1,5 +1,5 @@
 <h1>
-    <img src="https://github.com/furkannyildirim/WakeGuardApp/blob/master/ios/WakeGuard/Images.xcassets/AppIcon.appiconset/wg-icon-80px.png"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/ios/WakeGuard/Images.xcassets/AppIcon.appiconset/wg-icon-80px.png"/>
     WakeGuard App
 </h1>
 
