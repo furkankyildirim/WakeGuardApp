@@ -25,7 +25,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -40,11 +40,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Deneme 1</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Deneme 2</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Deneme 3</string>
+	<string>WakeGuard, constantly compares your location with the target area in the background and activates the alarm when you arrive. In order for your location alarms to work in the background, you have to allow WakeGuard to track your location in the background</string>
 	<key>NSMotionUsageDescription</key>
 	<string>App requires motion tracking</string>
 	<key>UIAppFonts</key>
