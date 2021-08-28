@@ -16,27 +16,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_bg" id="KD8-x8-33N">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_bg" translatesAutoresizingMaskIntoConstraints="NO" id="3vt-t3-hsx">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="KD8-x8-33N" secondAttribute="height" multiplier="195:422" id="4kw-XO-UBg"/>
-                                </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" layoutMarginsFollowReadableWidth="YES" image="splash_logo" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03e-E2-dtU">
-                                <rect key="frame" x="0.0" y="1" width="390" height="844"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="KD8-x8-33N" secondAttribute="width" multiplier="50:216" id="lWO-xq-FFp" userLabel="splash_logo.width = 0.231481 × View.width"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_logo" translatesAutoresizingMaskIntoConstraints="NO" id="oY2-1A-cL9">
+                                <rect key="frame" x="0.0" y="44" width="390" height="766"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="KD8-x8-33N" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="6t8-jW-Iem"/>
-                            <constraint firstItem="KD8-x8-33N" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Ieq-L1-cQe"/>
-                            <constraint firstItem="KD8-x8-33N" firstAttribute="trailing" secondItem="Bcu-3y-fUS" secondAttribute="trailing" id="MiZ-IV-ImB"/>
-                            <constraint firstAttribute="bottom" secondItem="KD8-x8-33N" secondAttribute="bottom" id="zgG-pC-MJX"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="oY2-1A-cL9" secondAttribute="trailing" id="752-jT-EtV"/>
+                            <constraint firstItem="3vt-t3-hsx" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="8VQ-Kf-mo8"/>
+                            <constraint firstItem="3vt-t3-hsx" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="8h1-8c-JZX"/>
+                            <constraint firstItem="oY2-1A-cL9" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="AI2-3f-jxx"/>
+                            <constraint firstItem="3vt-t3-hsx" firstAttribute="trailing" secondItem="Bcu-3y-fUS" secondAttribute="trailing" id="F0C-Iy-7Ej"/>
+                            <constraint firstItem="oY2-1A-cL9" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="TyM-C3-cHy"/>
+                            <constraint firstAttribute="bottom" secondItem="3vt-t3-hsx" secondAttribute="bottom" id="U1N-eH-Zm6"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="oY2-1A-cL9" secondAttribute="bottom" id="xZr-cj-8md"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -47,6 +44,6 @@
     </scenes>
     <resources>
         <image name="splash_bg" width="2160" height="3840"/>
-        <image name="splash_logo" width="500" height="517"/>
+        <image name="splash_logo" width="91" height="94"/>
     </resources>
 </document>
