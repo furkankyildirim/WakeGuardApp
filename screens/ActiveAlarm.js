@@ -80,9 +80,6 @@ const ActiveAlarm = observer(({ navigation }) => {
               channelId: "channel-id",
               title: `${strings.notification_title}`,
               message: `${strings.notification_info}`,
-              largeIcon: "assets/images/appIcon.png",
-              bigLargeIcon: "assets/images/appIcon.png",
-              smallIcon: "appIcon"
             })
             playSound()
             Vibration.vibrate([1000, 1000], true);

@@ -1,5 +1,5 @@
 <h1>
-    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/ios/WakeGuard/Images.xcassets/AppIcon.appiconset/wg-icon-80px.png"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/ios/icon-dark.png"/>
     WakeGuard App
 </h1>
 
@@ -11,8 +11,8 @@ WakeGuard adjusts how many meters to stay at your target location and informs yo
 
 ### App Images
 <div style="justify-content: space-between;flex-direction: column;">
-    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb.png" width="30%" height="auto"/>
-    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-2.png" width="30%" height="auto"/>
-    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/1284x2778bb-3.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/screenshots/ios/phone/phone-home-dark.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/screenshots/ios/phone/phone-active-dark.png" width="30%" height="auto"/>
+    <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/screenshots/ios/phone/phone-alarm-dark.png" width="30%" height="auto"/>
 </div>
 
