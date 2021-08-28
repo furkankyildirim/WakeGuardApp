@@ -31,7 +31,7 @@
 
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDPduMlD2gKAPU28m9avoqp49NzD7CWbYY"/>
+        android:value="Your API Key"/>
       <meta-data  
         android:name="com.dieam.reactnativepushnotification.notification_color"
         android:resource="@color/white"/>

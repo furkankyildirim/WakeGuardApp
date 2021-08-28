@@ -121,7 +121,7 @@ export default class SearchScreen extends Component {
           <View style={styles.alarmSettings}>
             <View style={styles.chooseDestinationContainer}>
               <View style={styles.locationInput}>
-                <Icon name="magnifier" size={RFValue(18)} color="#000" />
+                <Icon name="magnifier" size={RFValue(18)} color="#fff" />
                 <TextInput
                   clearButtonMode="while-editing"
                   placeholder={
