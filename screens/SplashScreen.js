@@ -12,8 +12,8 @@ const Splash = () => {
         <Image style={styles.image}
         source={
             colorScheme === "dark" ? 
-            require(`../assets/images/whiteLogo.png`):
-            require(`../assets/images/blueLogo.png`)
+            require(`../assets/images/old/whiteLogo.png`):
+            require(`../assets/images/old/blueLogo.png`)
         }
         >
         </Image>
