@@ -1,12 +1,13 @@
 import mobx, {action, observable, toJS} from 'mobx';
 import {Alert} from 'react-native';
+import { strings } from './strings';
 
 class Store {
   @observable latitude;
   @observable longitude;
   @observable latitudeDelta = 0.0075;
   @observable longitudeDelta = 0.0075;
-  @observable targetName = 'Use to search detailed locations';
+  @observable targetName = strings.search_placeholder;
   @observable purchase = false;
   @observable alarm = true;
   @observable mapReferance;
