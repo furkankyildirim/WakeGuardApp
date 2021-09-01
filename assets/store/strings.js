@@ -51,7 +51,11 @@ export const strings = new LocalizedStrings({
     restore_purchase: 'Restore Purchase',
     close: 'Close',
     warning: "Attention",
-    net_msg: "An internet connection is required to use the application. Please close the application and try again."
+    net_msg: "An internet connection is required to use the application. Please close the application and try again.",
+    modal_title: "Use your Location",
+    modal_description1: "To see maps for automatically tracked activities, allow WakeGuard to use your location all of the time,",
+    modal_description2: "WakeGuard, will use location in the background to notify you when it reaches the border you set",
+    next: "Next"
   },
   'tr': {
     search_screen: "Arama Sayfası",
@@ -103,7 +107,11 @@ export const strings = new LocalizedStrings({
     restore_purchase: 'Satın Alınanları Geri Yükle',
     close: 'Kapat',
     warning: "Uyarı",
-    net_msg: "Uygulamayı kullanmak için internet bağlantısı gereklidir. Lütfen uygulamayı kapatın ve tekrar deneyin."
+    net_msg: "Uygulamayı kullanmak için internet bağlantısı gereklidir. Lütfen uygulamayı kapatın ve tekrar deneyin.",
+    modal_title: "Konumunuzu Kullanın",
+    modal_description1: "Otomatik olarak izlenen etkinlikler için haritaları görmek için WakeGuard'ın konumunuzu her zaman kullanmasına izin verin",
+    modal_description2: "WakeGuard, belirlediğiniz sınıra ulaştığında sizi bilgilendirmek için arka planda konumu kullanacak",
+    next: "İlerle"
   },
   'de': {
     search_screen: "Suchbildschirm",
@@ -155,7 +163,11 @@ export const strings = new LocalizedStrings({
     restore_purchase: 'Kauf wiederherstellen',
     close: 'Schließen',
     warning: "Warnung",
-    net_msg: "Zur Nutzung der Anwendung ist eine Internetverbindung erforderlich. Bitte schließen Sie die Anwendung und versuchen Sie es erneut."
+    net_msg: "Zur Nutzung der Anwendung ist eine Internetverbindung erforderlich. Bitte schließen Sie die Anwendung und versuchen Sie es erneut.",
+    modal_title: "Verwenden Sie Ihren Standort",
+    modal_description1: "Um Karten für automatisch verfolgte Aktivitäten anzuzeigen, erlauben Sie WakeGuard, Ihren Standort die ganze Zeit zu verwenden,",
+    modal_description2: "WakeGuard verwendet den Standort im Hintergrund, um Sie zu benachrichtigen, wenn die von Ihnen festgelegte Grenze erreicht wird",
+    next: "Weiter"
   },
   'fr': {
     search_screen: "Ecran de recherche",
@@ -207,8 +219,11 @@ export const strings = new LocalizedStrings({
     restore_purchase: "Restaurer l'achat",
     close: 'Fermer',
     warning: "Attention",
-    net_msg: "Une connexion Internet est nécessaire pour utiliser l'application. Veuillez fermer l'application et réessayer."
-    
+    net_msg: "Une connexion Internet est nécessaire pour utiliser l'application. Veuillez fermer l'application et réessayer.",
+    modal_title: "Utilisez votre position",
+    modal_description1: "Pour voir les cartes des activités suivies automatiquement, autorisez WakeGuard à utiliser votre position tout le temps",
+    modal_description2: "WakeGuard, utilisera l'emplacement en arrière-plan pour vous avertir lorsqu'il atteint la frontière que vous avez définie",
+    next: "Suivant"
   },
   'es': {
     search_screen: "Pantalla de busqueda",
@@ -260,7 +275,11 @@ export const strings = new LocalizedStrings({
     restore_purchase: 'Restaurar compra',
     close: 'Cerca',
     warning: "Atención",
-    net_msg: "Se requiere una conexión a Internet para utilizar la aplicación. Cierre la aplicación y vuelva a intentarlo."
+    net_msg: "Se requiere una conexión a Internet para utilizar la aplicación. Cierre la aplicación y vuelva a intentarlo.",
+    modal_title: "Use su ubicación",
+    modal_description1: "Para ver mapas de actividades rastreadas automáticamente, permita que WakeGuard use su ubicación todo el tiempo",
+    modal_description2: "WakeGuard, usará la ubicación en segundo plano para notificarte cuando llegue al borde que estableciste",
+    siguiente: "Siguiente"
   },
   'it': {
     search_screen: "Schermata di ricerca",
@@ -312,6 +331,10 @@ export const strings = new LocalizedStrings({
     restore_purchase: "Restore Purchase",
     close: "Chiudi",
     warning: "Attenzione",
-    net_msg: "Per utilizzare l'applicazione è necessaria una connessione a Internet. Chiudi l'applicazione e riprova."
+    net_msg: "Per utilizzare l'applicazione è necessaria una connessione a Internet. Chiudi l'applicazione e riprova.",
+    modal_title: "Usa la tua posizione",
+    modal_description1: "Per visualizzare le mappe per le attività rilevate automaticamente, consenti a WakeGuard di utilizzare sempre la tua posizione,",
+    modal_description2: "WakeGuard, utilizzerà la posizione in background per avvisarti quando raggiunge il confine che hai impostato",
+    successivo: "Avanti"
   },
 });

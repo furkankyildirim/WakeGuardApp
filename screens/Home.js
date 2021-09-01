@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Alert, Platform, Appearance,PermissionsAndroid} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Alert, Platform, Appearance, PermissionsAndroid, Modal, Image } from 'react-native';
 import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/SimpleLineIcons';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { check, request, PERMISSIONS, RESULTS, openSettings} from 'react-native-permissions';
+import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import { observer } from 'mobx-react';
 import axios from 'axios';
@@ -29,20 +29,20 @@ const Home = observer(({ navigation }) => {
   const [region, setRegion] = useState({});
   const [pin, setPin] = useState(true);
   const [mapVisibility, setMapVisibility] = useState(false);
-  const [modalVisibility, setModalVisibility] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   const map = useRef(null);
   const circle = useRef(null);
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
-      if (state.isConnected){
+      if (state.isConnected) {
         Store._mapReferance(map.current);
         if (Platform.OS === 'ios') {
           PushNotificationIOS.requestPermissions();
         }
         await checkPermissions();
         await getData();
-      } else{
+      } else {
         Alert.alert(
           `${strings.warning}`,
           `${strings.net_msg}`,
@@ -95,11 +95,11 @@ const Home = observer(({ navigation }) => {
   }
 
   checkPermissions = async () => {
-    if (Platform.OS === "ios"){
+    if (Platform.OS === "ios") {
       const permission = PERMISSIONS.IOS.LOCATION_ALWAYS;
       const checkPermission = await check(permission);
 
-      if(checkPermission === RESULTS.GRANTED){
+      if (checkPermission === RESULTS.GRANTED) {
         setFirstConfigure();
       }
       else {
@@ -108,24 +108,26 @@ const Home = observer(({ navigation }) => {
       }
     }
 
-    else if(Platform.OS === "android"){
+    else if (Platform.OS === "android") {
       const bgPermission = PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION;
       const fgPermission = PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION;
 
-      if(await PermissionsAndroid.check(fgPermission)){
-        setFirstConfigure();
-      }
-
-      else {
-        if(await PermissionsAndroid.request(fgPermission)){
-          await request(bgPermission);
-          setFirstConfigure();
-        } else {
-          AlertMessage(fgPermission);
-        } 
-      }
+      await PermissionsAndroid.check(fgPermission) ? setFirstConfigure() : setModalVisible(true);
     }
   };
+
+  androidPermissons = async () => {
+    const bgPermission = PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION;
+    const fgPermission = PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION;
+
+    if (await PermissionsAndroid.request(fgPermission)) {
+      await request(bgPermission);
+      setModalVisible(false);
+      setFirstConfigure();
+    } else {
+      AlertMessage(fgPermission);
+    }
+  }
 
   radiusContainer = (rds, sty) => {
     return (
@@ -193,24 +195,24 @@ const Home = observer(({ navigation }) => {
       Geolocation.getCurrentPosition((position) => resolve(position), (error => {
         getCurrentPosition();
         reject(error);
-      }), 
-      {
-        showLocationDialog:true,
-        timeout: 10000,
-        maximumAge: 1000,
-        enableHighAccuracy: true,
-      });
+      }),
+        {
+          showLocationDialog: true,
+          timeout: 10000,
+          maximumAge: 1000,
+          enableHighAccuracy: true,
+        });
     });
   };
-  
+
   getPositionInfo = async () => {
     const info =
       await axios.get(`${GEOCODING_API}key=${API_KEY}&latlng=${Store.latitude},${Store.longitude}
     &location_type=ROOFTOP&result_type=street_address`).catch(error => {
-      if(error) {
-        console.log(error.message)
-      }
-    });
+        if (error) {
+          console.log(error.message)
+        }
+      });
     if (info.data.status === 'OK') {
       Store._targetName(info.data.results[0].formatted_address);
     } else {
@@ -283,7 +285,7 @@ const Home = observer(({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       {mapVisibility === true ? (
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           {/* <Purchase /> */}
           <SafeAreaView style={styles.componentContainer}>
             <MapView
@@ -395,13 +397,102 @@ const Home = observer(({ navigation }) => {
             </View>
           </SafeAreaView>
         </View>
-      ) :<Splash/>
+      ) :
+        <View style={{ flex: 1 }}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={modalStyle.main}>
+              <View style={modalStyle.container}>
+                <View style={modalStyle.iconContainer}>
+                  <Icon name="location-pin" size={RFValue(30)} color='#2284F0' />
+                </View>
+                <Text style={modalStyle.title}>{strings.modal_title}</Text>
+                <View style={modalStyle.descriptionContainer1}>
+                  <Text style={modalStyle.description1}>{strings.modal_description1}</Text>
+                </View>
+                <View style={modalStyle.descriptionContainer2}>
+                  <Text style={modalStyle.description2}>{strings.modal_description2}</Text>
+                </View>
+                <Image style={modalStyle.image}
+                  source={require(`../assets/images/screenshots/general/phone/modal-map.png`)}
+                  width={width * 0.45} height={width * 0.45}
+                />
+                <TouchableOpacity style={modalStyle.buttonContainer} onPress={() => androidPermissons()}>
+                  <Text style={modalStyle.button}>{strings.next}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          <Splash />
+        </View>
       }
     </View>
   );
 });
 
 export default Home;
+
+const modalStyle = StyleSheet.create({
+  main: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  container: {
+    width: width * 0.8,
+    height: height * 0.8,
+    alignItems: "center",
+    backgroundColor: colorScheme === "dark" ? "rgb(66,66,66)" : "#FFFFFF",
+    borderRadius: 20
+  },
+  iconContainer: {
+    margin: width * 0.075
+  },
+  title: {
+    fontSize: RFValue(18),
+    fontWeight: '800',
+    color: colorScheme === "dark" ? "#FFFFFF" : "#000000",
+  },
+  descriptionContainer1: {
+    marginVertical: width * 0.075,
+    marginHorizontal: width * 0.0625,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  descriptionContainer2: {
+    marginHorizontal: width * 0.0625,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  description1: {
+    fontSize: RFValue(14),
+    textAlign: 'center',
+    color: colorScheme === "dark" ? "#FFFFFF" : "#000000",
+  },
+  description2: {
+    fontSize: RFValue(14),
+    textAlign: 'center',
+    color: colorScheme === "dark" ? "#FFFFFF" : "#000000",
+  },
+  image: {
+    width: width * 0.45,
+    height: width * 0.45,
+    resizeMode: 'contain',
+    marginVertical: width * 0.125,
+    borderRadius:8
+  },
+  buttonContainer:{
+    position: 'absolute',
+    bottom: width * 0.075,
+  },
+  button:{
+    color:'#2284F0'
+  }
+});
 
 const styles =
   colorScheme === 'dark'
