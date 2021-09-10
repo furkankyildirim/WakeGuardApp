@@ -1,4 +1,4 @@
-import mobx, {action, observable, toJS} from 'mobx';
+import {action, observable} from 'mobx';
 import {Alert} from 'react-native';
 import { strings } from './strings';
 
@@ -81,7 +81,7 @@ class Store {
     if (!favoriteJS.some((data) => data.time === value.time)) {
       favoriteJS.unshift(value);
     } else {
-      Alert.alert('Ekleme', 'Bu konum çoktan favorilere eklendi');
+      Alert.alert(strings.alert_title, strings.alert_descp,);
     }
     this.favorite = JSON.stringify(favoriteJS);
   };

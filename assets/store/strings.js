@@ -55,7 +55,9 @@ export const strings = new LocalizedStrings({
     modal_title: "Use your Location",
     modal_description1: "To see maps for automatically tracked activities, allow WakeGuard to use your location all of the time,",
     modal_description2: "WakeGuard, will use location in the background to notify you when it reaches the border you set",
-    next: "Next"
+    next: "Next",
+    alert_title: "Attention",
+    alert_descp: "This location has already been favorited"
   },
   'tr': {
     search_screen: "Arama Sayfası",
@@ -111,7 +113,9 @@ export const strings = new LocalizedStrings({
     modal_title: "Konumunuzu Kullanın",
     modal_description1: "Otomatik olarak izlenen etkinlikler için haritaları görmek için WakeGuard'ın konumunuzu her zaman kullanmasına izin verin",
     modal_description2: "WakeGuard, belirlediğiniz sınıra ulaştığında sizi bilgilendirmek için arka planda konumu kullanacak",
-    next: "İlerle"
+    next: "İlerle",
+    alert_title: "Dikkat",
+    alert_descp: "Bu konum zaten favorilere eklendi"
   },
   'de': {
     search_screen: "Suchbildschirm",
@@ -167,7 +171,9 @@ export const strings = new LocalizedStrings({
     modal_title: "Verwenden Sie Ihren Standort",
     modal_description1: "Um Karten für automatisch verfolgte Aktivitäten anzuzeigen, erlauben Sie WakeGuard, Ihren Standort die ganze Zeit zu verwenden,",
     modal_description2: "WakeGuard verwendet den Standort im Hintergrund, um Sie zu benachrichtigen, wenn die von Ihnen festgelegte Grenze erreicht wird",
-    next: "Weiter"
+    next: "Weiter",
+    alert_title: "Achtung",
+    alert_descp: "Dieser Ort wurde bereits als Favorit markiert"
   },
   'fr': {
     search_screen: "Ecran de recherche",
@@ -223,7 +229,9 @@ export const strings = new LocalizedStrings({
     modal_title: "Utilisez votre position",
     modal_description1: "Pour voir les cartes des activités suivies automatiquement, autorisez WakeGuard à utiliser votre position tout le temps",
     modal_description2: "WakeGuard, utilisera l'emplacement en arrière-plan pour vous avertir lorsqu'il atteint la frontière que vous avez définie",
-    next: "Suivant"
+    next: "Suivant",
+    alert_title: "Attention",
+    alert_descp: "Cet emplacement a déjà été mis en favori"
   },
   'es': {
     search_screen: "Pantalla de busqueda",
@@ -279,7 +287,9 @@ export const strings = new LocalizedStrings({
     modal_title: "Use su ubicación",
     modal_description1: "Para ver mapas de actividades rastreadas automáticamente, permita que WakeGuard use su ubicación todo el tiempo",
     modal_description2: "WakeGuard, usará la ubicación en segundo plano para notificarte cuando llegue al borde que estableciste",
-    siguiente: "Siguiente"
+    siguiente: "Siguiente",
+    alert_title: "Atención",
+    alert_descp: "Esta ubicación ya ha sido marcada como favorita"
   },
   'it': {
     search_screen: "Schermata di ricerca",
@@ -335,6 +345,8 @@ export const strings = new LocalizedStrings({
     modal_title: "Usa la tua posizione",
     modal_description1: "Per visualizzare le mappe per le attività rilevate automaticamente, consenti a WakeGuard di utilizzare sempre la tua posizione,",
     modal_description2: "WakeGuard, utilizzerà la posizione in background per avvisarti quando raggiunge il confine che hai impostato",
-    successivo: "Avanti"
+    successivo: "Avanti",
+    alert_title: "Attenzione",
+    alert_descp: "Questa posizione è già stata aggiunta ai preferiti"
   },
 });
