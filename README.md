@@ -16,3 +16,11 @@ WakeGuard adjusts how many meters to stay at your target location and informs yo
     <img src="https://github.com/furkankyildirim/WakeGuardApp/blob/master/assets/images/screenshots/ios/phone/phone-alarm-dark.png" width="30%" height="auto"/>
 </div>
 
+#
+
+### App Links
+
+Google Play Store: https://play.google.com/store/apps/details?id=com.wakeguard
+
+App Store: https://apps.apple.com/app/wakeguard/id1552585984
+
